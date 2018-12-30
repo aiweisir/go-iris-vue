@@ -1,0 +1,10 @@
+DisablePathCorrection: false
+EnablePathEscape: false
+FireMethodNotAllowed: false
+DisableBodyConsumptionOnUnmarshal: false
+TimeFormat: Mon, 01 Jan 2006 15:04:05 GMT
+Charset: UTF-8
+#自定义配置
+Other:
+  IgnoreURLs: [/, /login, /registe, /login_pwd]
+

@@ -1,0 +1,27 @@
+
+master:
+  dialect: mysql
+  url: 127.0.0.1
+  user: root
+  password: root
+  database: casbin
+  port: 3306
+  charset: utf8
+  parseTime: true
+  maxIdleConns: 10
+  maxOpenConns: 50
+  connMaxLifetime: 10
+  sslmode:
+slave:
+  dialect: mysql
+  url: 127.0.0.1
+  user: root
+  password: root
+  database: casbin
+  port: 3306
+  charset: utf8
+  parseTime: true
+  maxIdleConns: 10
+  maxOpenConns: 50
+  connMaxLifetime: 10
+  sslmode:
