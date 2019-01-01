@@ -10,6 +10,9 @@ import (
 
 	"github.com/casbin/casbin"
 	_ "github.com/go-sql-driver/mysql"
+	"casbin-demo/supports/jwts"
+	"casbin-demo/supports"
+	"github.com/kataras/golog"
 )
 
 var (
@@ -58,17 +61,16 @@ func Serve(ctx context.Context) {
 	}
 
 	// casbin权限拦截
-	//c := e.Enforce("alice", path, "get", ".*")
-	//fmt.Printf("path= %s, casbincheck= %t\n", path, c)
-	//if !c {
-	//	ctx.StatusCode(http.StatusForbidden) // Status Forbiden
-	//	ctx.JSON(utils.Error(iris.StatusForbidden, "权限不足", nil))
-	//	//ctx.StopExecution()
-	//	return
-	//}
+	yes := e.Enforce("alice", path, "get", ".*")
+	golog.Infof("path= %s, casbincheck= %t\n", path, yes)
+	if !yes {
+		supports.Unauthorized(ctx, supports.Permissions_less, nil)
+		//ctx.StopExecution()
+		return
+	}
 
 	// jwt token拦截
-	//jwts.ConfigJWT().Serve(ctx)
+	jwts.ConfigJWT().Serve(ctx)
 	ctx.Next()
 }
 

@@ -26,4 +26,3 @@ func (us *userService) DoRegiste(user *models.User) bool {
 func (us *userService) DoLogin(username string) *models.User {
 	return us.repo.QueryByUsername(username)
 }
-

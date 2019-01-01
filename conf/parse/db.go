@@ -13,7 +13,7 @@ var (
 )
 
 func init() {
-	golog.Info("@@@ init db conf")
+	golog.Info("@@@ Init db conf")
 	ParseDBSetting()
 }
 

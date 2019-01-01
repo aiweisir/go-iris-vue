@@ -13,6 +13,7 @@ import (
 
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/context"
+	"casbin-demo/conf/parse"
 )
 
 // iris provides some basic middleware, most for your learning courve.
@@ -240,7 +241,8 @@ type Claims struct {
 }
 // 在登录成功的时候生成token
 func GenerateToken(username, password string) (string, error) {
-	expireTime := time.Now().Add(1 * time.Minute)
+	//expireTime := time.Now().Add(60 * time.Second)
+	expireTime := time.Now().Add(time.Duration(parse.O.JWTTimeout) * time.Second)
 
 	claims := Claims{
 		username,

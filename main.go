@@ -11,9 +11,9 @@ import (
 
 	//cm "github.com/iris-contrib/middleware/casbin"
 
-	// 注入路由
+	// Inject all services
 	_ "casbin-demo/services"
-	// 初始化数据库配置
+	// Init all configuration
 	_ "casbin-demo/conf/parse"
 
 	"github.com/kataras/iris/middleware/logger"
@@ -24,17 +24,14 @@ import (
 // $ go run main.go
 
 func main() {
-	c := iris.YAML("conf/app.yml")
-	parse.InitOtherConfig(&c)
-
 	app := newApp()
-	app.Logger().SetLevel("debug")
+	app.Logger().SetLevel(parse.O.LogLevel)
 	app.RegisterView(iris.HTML("resources", ".html").Reload(true))
 	app.StaticWeb("/static", "resources/static") // 设置静态资源
 
 	app.Run(
 		iris.Addr(":8080"),
-		iris.WithConfiguration(c))
+		iris.WithConfiguration(parse.C))
 }
 
 func newApp() *iris.Application {
@@ -60,9 +57,6 @@ func newApp() *iris.Application {
 
 // 注册中间件、定义错误处理
 func registerMiddlewareAndDefError(app *iris.Application) {
-	// ---------------------- 注册中间件 ------------------------
-	app.Use(rcover.New())
-
 	customLogger := logger.New(logger.Config{
 		//状态显示状态代码
 		Status: true,
@@ -81,7 +75,7 @@ func registerMiddlewareAndDefError(app *iris.Application) {
 		//如果不为空然后它的内容来自`ctx.GetHeader（“User-Agent”）
 		MessageHeaderKeys: []string{"User-Agent"},
 	})
-	app.Use(customLogger, casbins.Serve)
+	app.Use(rcover.New(), customLogger, casbins.Serve)
 
 	// ---------------------- 定义错误处理 ------------------------
 	app.OnErrorCode(iris.StatusNotFound, customLogger, func(ctx iris.Context) {

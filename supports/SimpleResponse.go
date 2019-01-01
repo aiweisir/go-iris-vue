@@ -9,15 +9,16 @@ const (
 	DATA string = "data"
 
 	// msg define
-	Success                = "成功"
-	Option_success  string = "操作成功"
-	Registe_success  string = "操作成功"
-	Login_success   string = "登录成功"
-	Username_failur string = "用户名错误"
-	Password_failur string = "密码错误"
-	Token_failur    string = "token错误"
-	Token_create_failur    string = "生成token错误"
-	Not_found       string = "您请求的url不存在"
+	Success                    = "成功"
+	Option_success      string = "操作成功"
+	Registe_success     string = "注册成功"
+	Login_success       string = "登录成功"
+	Username_failur     string = "用户名错误"
+	Password_failur     string = "密码错误"
+	Token_failur        string = "token错误"
+	Token_create_failur string = "生成token错误"
+	Not_found           string = "您请求的url不存在"
+	Permissions_less    string = "权限不足"
 
 	// value define
 

@@ -8,7 +8,7 @@ import (
 
 // 统一注入service
 func init() {
-	golog.Info("@@@ init injection services")
+	golog.Info("@@@ Inject all services")
 
 	userService := NewUserService(mappers.NewUserMapper())
 
