@@ -1,8 +1,6 @@
 package parse
 
 import (
-	"io/ioutil"
-
 	"github.com/kataras/golog"
 
 	"gopkg.in/yaml.v2"
@@ -18,15 +16,24 @@ func init() {
 }
 
 func ParseDBSetting() {
-	data, err := ioutil.ReadFile("conf/db.yml")
-	//golog.Infof("%s", data)
+	//data, err := ioutil.ReadFile("conf/db.yml")
+	////golog.Infof("%s", data)
+	//if err != nil {
+	//	golog.Fatalf("@@@ %s", err)
+	//}
+	//err = yaml.Unmarshal(data, &DBConfig)
+	//if err != nil {
+	//	golog.Fatalf("@@@ Unmarshal db config error!! %s", err)
+	//}
+
+	dbData, err := Asset("conf/db.yml")
 	if err != nil {
-		golog.Fatalf("@@@ %s", err)
+		golog.Fatalf("Get Asset of db-data.go error. %s", err)
 	}
-	err = yaml.Unmarshal(data, &DBConfig)
-	if err != nil {
-		golog.Fatalf("@@@ Unmarshal db config error!! %s", err)
+	if err = yaml.Unmarshal(dbData, &DBConfig); err != nil {
+		golog.Fatalf("Unmarshal Asset of db-data.go error. %s", err)
 	}
+
 	//golog.Info(DBConfig)
 }
 

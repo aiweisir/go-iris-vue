@@ -6,6 +6,10 @@ import (
 	"github.com/casbin/casbin"
 	"github.com/casbin/xorm-adapter"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/kataras/golog"
+	"casbin-demo/supports"
+	"github.com/kataras/iris/context"
+	"github.com/dgrijalva/jwt-go"
 )
 
 var (
@@ -18,6 +22,8 @@ var (
 	// The adapter will use the table named "casbin_rule".
 	// If it doesn't exist, the adapter will create it automatically.
 	// a := xormadapter.NewAdapter("mysql", "mysql_username:mysql_password@tcp(127.0.0.1:3306)/abc", true)
+
+	// TODO use go-bindata fill
 	e = casbin.NewEnforcer("conf/rbac_model.conf", a)
 )
 
@@ -45,25 +51,17 @@ func GetEnforcer() *casbin.Enforcer {
 // [...]
 // app.Get("/dataset1/resource1", casbinMiddleware.ServeHTTP, myHandler)
 // [...]
-//func CheckPermissions(ctx context.Context) bool {
-//
-//	// jwt token拦截
-//	//jwts.ConfigJWT().Serve(ctx)
-//	//a := ctx.Values().Get(jwts.DefaultContextKey).(*jwt.Token)
-//	//golog.Infof("req set values jwt key =%s", a.Claims)
-//
-//	 //casbin权限拦截
-//	yes := e.Enforce("alice", "", "get", ".*")
-//	golog.Infof("path= %s, casbincheck= %t\n", "", yes)
-//	if !yes {
-//		supports.Unauthorized(ctx, supports.Permissions_less, nil)
-//		ctx.StopExecution()
-//		return false
-//	}
-//
-//	return true
-//	//ctx.Next()
-//}
+func CheckPermissions(ctx context.Context, token *jwt.Token) bool {
+	ok := e.Enforce("alice", "", "get", ".*")
+	golog.Infof("Path= %s, Permissions= %t\n", "", ok)
+	if !ok {
+		supports.Unauthorized(ctx, supports.Permissions_less, nil)
+		ctx.StopExecution()
+		return !ok
+	}
+	return ok
+	//ctx.Next()
+}
 
 // Wrapper is the router wrapper, prefer this method if you want to use casbins to your entire iris application.
 // Usage:

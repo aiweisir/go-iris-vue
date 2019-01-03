@@ -3,12 +3,23 @@ package parse
 import (
 	"github.com/kataras/iris"
 	"github.com/kataras/golog"
+	"gopkg.in/yaml.v2"
 )
 
 func init() {
 	golog.Info("@@@ Init app conf")
-	c := iris.YAML("conf/app.yml")
+	//c := iris.YAML("conf/app.yml")
+
+	appData, err := Asset("conf/app.yml")
+	if err != nil {
+		golog.Fatalf("Get Asset of app-data.go error. %s", err)
+	}
+	c := iris.DefaultConfiguration()
+	if err = yaml.Unmarshal(appData, &c); err != nil {
+		golog.Fatalf("Unmarshal Asset of app-data.go error. %s", err)
+	}
 	C = c
+
 	// 解析other的key
 	iURLs := c.GetOther()[ignoreURLs].([]interface{})
 	for _, v := range iURLs {

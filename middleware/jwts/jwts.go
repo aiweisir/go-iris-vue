@@ -15,6 +15,7 @@ import (
 
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/context"
+	"casbin-demo/models"
 )
 
 // iris provides some basic middleware, most for your learning courve.
@@ -47,17 +48,23 @@ type Jwts struct {
 }
 
 // Serve the middleware's action
-func (m *Jwts) Serve(ctx context.Context) {
+func (m *Jwts) Serve(ctx context.Context) *jwt.Token {
 	path := ctx.Path()
 	fmt.Println("to jwts path:" + path)
 
 	if err := m.CheckJWT(ctx); err != nil {
 		//supports.Unauthorized(ctx, supports.Token_failur, nil)
 		//ctx.StopExecution()
-		return
+		return nil
 	}
+
+	token := ctx.Values().Get(DefaultContextKey)
+	if token != nil {
+		return token.(*jwt.Token)
+	}
+	return nil
 	// If everything ok then call next.
-	ctx.Next()
+	//ctx.Next()
 }
 
 
@@ -237,8 +244,9 @@ func ConfigJWT() *Jwts {
 }
 
 type Claims struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
+	//Username string `json:"username"`
+	//Password string `json:"password"`
+	User models.User `json:"user"`
 	jwt.StandardClaims
 }
 // 在登录成功的时候生成token
@@ -247,8 +255,12 @@ func GenerateToken(username, password string) (string, error) {
 	expireTime := time.Now().Add(time.Duration(parse.O.JWTTimeout) * time.Second)
 
 	claims := Claims{
-		username,
-		password,
+		//username,
+		//password,
+		models.User{
+			Username: username,
+			Password: password,
+		},
 		jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
 			Issuer:    "iris-casbins-jwt",

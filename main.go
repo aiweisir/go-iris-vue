@@ -11,7 +11,7 @@ import (
 
 	//cm "github.com/iris-contrib/middleware/casbins"
 
-	// Inject all services
+	// Inject all service
 	_ "casbin-demo/services"
 	// Init all configuration
 	_ "casbin-demo/conf/parse"
@@ -84,7 +84,7 @@ func registerMiddlewareAndDefError(app *iris.Application) {
 	app.Use(
 		rcover.New(),
 		customLogger,
-		middleware.Serve)
+		middleware.ServeHTTP)
 
 	// ---------------------- 定义错误处理 ------------------------
 	app.OnErrorCode(iris.StatusNotFound, customLogger, func(ctx iris.Context) {

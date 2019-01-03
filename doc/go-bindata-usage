@@ -1,0 +1,19 @@
+### install go-bindata
+go get -u github.com/go-bindata/go-bindata/...
+
+eg:
+** Pack current directory(conf/) all configs. [Please select this command!]
+go-bindata -pkg parse -o conf/parse/conf-data.go conf/
+
+
+** Pack current directory(conf/**), and to include all input sub-directories recursively configs.
+go-bindata -pkg parse -o conf/parse/conf-data.go conf/...
+
+** Pack conf/app.yml
+go-bindata -pkg parse -o conf/parse/app-data.go conf/app.yml
+
+** Pack conf/db.yml
+go-bindata -pkg parse -o conf/parse/db-data.go conf/app.yml
+
+** Pack conf/app.yml
+go-bindata -pkg parse -o conf/parse/rbac_model-data.go conf/rbac_model.conf

@@ -4,52 +4,41 @@ import (
 	"casbin-demo/conf/parse"
 	"casbin-demo/middleware/casbins"
 	"casbin-demo/middleware/jwts"
-	"casbin-demo/supports"
 	"strings"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/kataras/golog"
 	"github.com/kataras/iris/context"
 )
 
 type Middleware struct {
-
 }
 
-func Serve(ctx context.Context) {
-	return
+func ServeHTTP(ctx context.Context) {
 	path := ctx.Path()
 	// 过滤静态资源、login接口、首页等...不需要验证
 	if checkURL(path) || strings.Contains(path, "/static") {
 		ctx.Next()
 		return
 	}
-	//
+
 	// jwt token拦截
-	jwts.ConfigJWT().Serve(ctx)
-	token := ctx.Values().Get(jwts.DefaultContextKey)
+	token := jwts.ConfigJWT().Serve(ctx)
 	if token == nil {
 		//supports.Unauthorized(ctx, supports.Token_failur, nil)
 		//ctx.StopExecution()
 		return
 	}
-
-	golog.Infof("jwt key =%v", token)
-	golog.Infof("req set values of jwt key =%s", token.(*jwt.Token).Claims)
+	golog.Infof("Request of Claims, %v", token.Claims)
 
 	// casbin权限拦截
-	yes := casbins.GetEnforcer().Enforce("alice", path, "get", ".*")
-	golog.Infof("path= %s, casbincheck= %t\n", path, yes)
-	//yes := true
-
-	//yes2 := casbins.CheckPermissions(ctx)
-
-	if !yes {
-		supports.Unauthorized(ctx, supports.Permissions_less, nil)
-		ctx.StopExecution()
+	ok := casbins.CheckPermissions(ctx, token)
+	if !ok {
+		//supports.Unauthorized(ctx, supports.Permissions_less, nil)
+		//ctx.StopExecution()
 		return
 	}
 
+	// Pass to real API
 	ctx.Next()
 }
 
