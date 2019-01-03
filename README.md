@@ -25,9 +25,9 @@ go+iris+casbin+jwt+vue的web框架，可前后分离。<br />
 3. nginx 不必须
 
 #### 使用说明
-##### http header设置：<br />
-key：Authorization<br />
-value：bearer 'encryption-token-str'<br />
+##### HTTP Header<key:value>设置：<br />
+key-> Authorization<br />
+value-> bearer 'encryption-token-str'<br />
 
 1. npm run install安装本地前端环境
 2. 
