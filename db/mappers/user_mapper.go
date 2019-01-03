@@ -4,44 +4,34 @@ import (
 	"casbin-demo/db"
 	"casbin-demo/models"
 
-	"github.com/jinzhu/gorm"
+	"github.com/go-xorm/xorm"
 	"github.com/kataras/golog"
 )
 
 //type Query func(user models.User) bool
 
 type UserMapper interface {
-	QueryByUsername(username string) *models.User
-	InsertOneUser(user *models.User) bool
+	RegisteUser(user *models.User) error
+	QueryByUsername(user *models.User) (bool, error)
 }
 
 func NewUserMapper() UserMapper {
 	return &userMapper{
-		db: db.MasterDB(),
+		db: db.MasterEngine(),
 	}
 }
 
 type userMapper struct {
-	db *gorm.DB
+	db *xorm.Engine
 }
 
-func (m *userMapper) QueryByUsername(username string) *models.User {
-	//// 读取
-	//var product Product
-	//db.First(&product, 1) // 查询id为1的product
-	//db.First(&product, "code = ?", "L1212") // 查询code为l1212的product
-
-	user := models.User{}
-	golog.Info("models.User{} is nil")
-	m.db.First(&user, "username=?", username)
-	return &user
+func (m *userMapper) RegisteUser(user *models.User) error {
+	golog.Info(user)
+	_, err := m.db.Insert(user)
+	return err
 }
 
-func (m *userMapper) InsertOneUser(user *models.User) bool {
-	m.db.Create(&user)
-	f := m.db.NewRecord(user)
-	return f
+func (m *userMapper) QueryByUsername(user *models.User) (bool, error) {
+	golog.Infof("login user ->> %v", user)
+	return m.db.Get(user)
 }
-
-
-

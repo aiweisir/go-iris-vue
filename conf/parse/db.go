@@ -36,17 +36,21 @@ type DB struct {
 }
 
 type DBConfigInfo struct {
-	Dialect         string `yaml:"dialect"`
-	URL             string `yaml:"url"`
-	User            string `yaml:"user"`
-	Password        string `yaml:"password"`
-	Database        string `yaml:"database"`
-	Port            string `yaml:"port"`
-	Host            string `yaml:"host"`
-	Charset         string `yaml:"charset"`
-	ParseTime       bool   `yaml:"parseTime"`
-	MaxIdleConns    int    `yaml:"maxIdleConns"`
-	MaxOpenConns    int    `yaml:"maxOpenConns"`
-	ConnMaxLifetime int64  `yaml:"connMaxLifetime: 10"`
-	Sslmode         string `yaml:"sslmode"`
+	Dialect  string `yaml:"dialect"`
+	User     string `yaml:"user"`
+	Password string `yaml:"password"`
+	Host     string `yaml:"host"`
+	Port     int    `yaml:"port"`
+	Database string `yaml:"database"`
+	Charset  string `yaml:"charset"`
+	ShowSql  bool   `yaml:"showSql"`
+	LogLevel string `yaml:"logLevel"`
+	MaxIdleConns int `yaml:"maxIdleConns"`
+	MaxOpenConns int `yaml:"maxOpenConns"`
+
+	//ParseTime       bool   `yaml:"parseTime"`
+	//MaxIdleConns    int    `yaml:"maxIdleConns"`
+	//MaxOpenConns    int    `yaml:"maxOpenConns"`
+	//ConnMaxLifetime int64  `yaml:"connMaxLifetime: 10"`
+	//Sslmode         string `yaml:"sslmode"`
 }

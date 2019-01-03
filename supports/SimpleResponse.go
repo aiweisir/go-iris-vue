@@ -1,6 +1,9 @@
 package supports
 
-import "github.com/kataras/iris"
+import (
+	"github.com/kataras/golog"
+	"github.com/kataras/iris"
+)
 
 const (
 	// key定义
@@ -11,8 +14,11 @@ const (
 	// msg define
 	Success                    = "成功"
 	Option_success      string = "操作成功"
+	Option_failur       string = "操作失败"
 	Registe_success     string = "注册成功"
+	Registe_failur      string = "注册失败"
 	Login_success       string = "登录成功"
+	Login_failur        string = "登录失败"
 	Username_failur     string = "用户名错误"
 	Password_failur     string = "密码错误"
 	Token_failur        string = "token错误"
@@ -31,7 +37,7 @@ func Ok_(ctx iris.Context, msg string) {
 
 func Ok(ctx iris.Context, msg string, data interface{}) {
 	ctx.StatusCode(iris.StatusOK)
-	ctx.JSON(&iris.Map{
+	ctx.JSON(iris.Map{
 		CODE: iris.StatusOK,
 		MSG:  msg,
 		DATA: data,
@@ -41,9 +47,10 @@ func Ok(ctx iris.Context, msg string, data interface{}) {
 // 401 error define
 func Unauthorized(ctx iris.Context, msg string, data interface{}) {
 	unauthorized := iris.StatusUnauthorized
+	golog.Error("1111")
 
 	ctx.StatusCode(unauthorized)
-	ctx.JSON(&iris.Map{
+	ctx.JSON(iris.Map{
 		CODE: unauthorized,
 		MSG:  msg,
 		DATA: data,
@@ -53,7 +60,7 @@ func Unauthorized(ctx iris.Context, msg string, data interface{}) {
 // common error define
 func Error(ctx iris.Context, status int, msg string, data interface{}) {
 	ctx.StatusCode(status)
-	ctx.JSON(&iris.Map{
+	ctx.JSON(iris.Map{
 		CODE: status,
 		MSG:  msg,
 		DATA: data,

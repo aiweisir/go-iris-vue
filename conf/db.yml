@@ -1,27 +1,25 @@
 
 master:
   dialect: mysql
-  url: 127.0.0.1
   user: root
   password: root
-  database: casbin
+  host: 127.0.0.1
   port: 3306
+  database: casbin
   charset: utf8
-  parseTime: true
-  maxIdleConns: 10
-  maxOpenConns: 50
-  connMaxLifetime: 10
-  sslmode:
+  showSql: true
+  logLevel: debug
+  maxIdleConns: 10 # 连接池的空闲数大小
+#  maxOpenConns: 10 # 最大打开连接数
 slave:
   dialect: mysql
-  url: 127.0.0.1
   user: root
   password: root
-  database: casbin
+  host: 127.0.0.1
   port: 3306
+  database: casbin
   charset: utf8
-  parseTime: true
-  maxIdleConns: 10
-  maxOpenConns: 50
-  connMaxLifetime: 10
-  sslmode:
+  showSql: true
+  logLevel: debug
+  maxIdleConns: 10 # 连接池的空闲数大小
+#  maxOpenConns: 10 # 最大打开连接数

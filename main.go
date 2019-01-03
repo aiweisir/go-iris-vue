@@ -1,15 +1,15 @@
 package main
 
 import (
-	"casbin-demo/casbins"
 	"casbin-demo/conf/parse"
+	"casbin-demo/middleware"
 	"casbin-demo/routes"
 	"casbin-demo/routes/dispatch"
 	"casbin-demo/supports"
 
 	"github.com/kataras/iris"
 
-	//cm "github.com/iris-contrib/middleware/casbin"
+	//cm "github.com/iris-contrib/middleware/casbins"
 
 	// Inject all services
 	_ "casbin-demo/services"
@@ -20,7 +20,7 @@ import (
 	rcover "github.com/kataras/iris/middleware/recover"
 )
 
-// $ go get github.com/casbin/casbin
+// $ go get github.com/casbins/casbins
 // $ go run main.go
 
 func main() {
@@ -51,6 +51,12 @@ func newApp() *iris.Application {
 			user.Post("/registe", dispatch.Handler(routes.Registe))
 			user.Post("/login", dispatch.Handler(routes.Login))
 		}
+		user.Post("/s", func(ctx iris.Context) {
+			ctx.JSON(iris.Map{
+				"a": 1,
+				"b": 2,
+			})
+		})
 	})
 	return app
 }
@@ -75,7 +81,10 @@ func registerMiddlewareAndDefError(app *iris.Application) {
 		//如果不为空然后它的内容来自`ctx.GetHeader（“User-Agent”）
 		MessageHeaderKeys: []string{"User-Agent"},
 	})
-	app.Use(rcover.New(), customLogger, casbins.Serve)
+	app.Use(
+		rcover.New(),
+		customLogger,
+		middleware.Serve)
 
 	// ---------------------- 定义错误处理 ------------------------
 	app.OnErrorCode(iris.StatusNotFound, customLogger, func(ctx iris.Context) {

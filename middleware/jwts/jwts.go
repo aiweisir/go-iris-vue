@@ -11,9 +11,10 @@ import (
 
 	"time"
 
+	"casbin-demo/conf/parse"
+
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/context"
-	"casbin-demo/conf/parse"
 )
 
 // iris provides some basic middleware, most for your learning courve.
@@ -41,17 +42,18 @@ type errorHandler func(context.Context, string)
 type TokenExtractor func(context.Context) (string, error)
 
 // Middleware the middleware for JSON Web tokens authentication method
-type Middleware struct {
+type Jwts struct {
 	Config Config
 }
 
 // Serve the middleware's action
-func (m *Middleware) Serve(ctx context.Context) {
+func (m *Jwts) Serve(ctx context.Context) {
 	path := ctx.Path()
 	fmt.Println("to jwts path:" + path)
 
 	if err := m.CheckJWT(ctx); err != nil {
-		ctx.StopExecution()
+		//supports.Unauthorized(ctx, supports.Token_failur, nil)
+		//ctx.StopExecution()
 		return
 	}
 	// If everything ok then call next.
@@ -104,20 +106,20 @@ func FromFirst(extractors ...TokenExtractor) TokenExtractor {
 	}
 }
 
-func (m *Middleware) logf(format string, args ...interface{}) {
+func (m *Jwts) logf(format string, args ...interface{}) {
 	if m.Config.Debug {
 		log.Printf(format, args...)
 	}
 }
 
 // Get returns the user (&token) information for this client/request
-func (m *Middleware) Get(ctx context.Context) *jwt.Token {
+func (m *Jwts) Get(ctx context.Context) *jwt.Token {
 	return ctx.Values().Get(m.Config.ContextKey).(*jwt.Token)
 }
 
 
 // CheckJWT the main functionality, checks for token
-func (m *Middleware) CheckJWT(ctx context.Context) error {
+func (m *Jwts) CheckJWT(ctx context.Context) error {
 	if !m.Config.EnableAuthOnOptions {
 		if ctx.Method() == iris.MethodOptions {
 			return nil
@@ -190,7 +192,7 @@ func (m *Middleware) CheckJWT(ctx context.Context) error {
 		}
 	}
 
-	//m.logf("JWT: %v", parsedToken)
+	m.logf("JWT: %v", parsedToken)
 
 	// If we get here, everything worked and we can set the
 	// user property in context.
@@ -207,7 +209,7 @@ const SECRET = "My Secret"
 //	supports.Error(ctx, iris.StatusUnauthorized, supports.Token_Failur, nil)
 //}
 // jwt中间件配置
-func ConfigJWT() *Middleware {
+func ConfigJWT() *Jwts {
 	c := Config{
 		ContextKey: DefaultContextKey,
 		//这个方法将验证jwt的token
@@ -231,7 +233,7 @@ func ConfigJWT() *Middleware {
 		Debug: true,
 		EnableAuthOnOptions: false,
 	}
-	return &Middleware{Config: c}
+	return &Jwts{Config: c}
 }
 
 type Claims struct {
@@ -249,7 +251,7 @@ func GenerateToken(username, password string) (string, error) {
 		password,
 		jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
-			Issuer:    "iris-casbin-jwt",
+			Issuer:    "iris-casbins-jwt",
 		},
 	}
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

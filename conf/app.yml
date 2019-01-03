@@ -6,7 +6,7 @@ TimeFormat: Mon, 01 Jan 2006 15:04:05 GMT
 Charset: UTF-8
 #自定义配置
 Other:
-  IgnoreURLs: [/, /login, /registe, /login_pwd]
+  IgnoreURLs: [/, /user/login, /user/registe, /login_pwd]
   JWTTimeout: 60 #second
   LogLevel: debug
 

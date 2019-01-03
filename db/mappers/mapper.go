@@ -10,6 +10,9 @@ import (
 )
 
 func main()  {
+	// Initialize a Xorm adapter and use it in a Casbin enforcer:
+	// The adapter will use the MySQL database named "casbins".
+	// If it doesn't exist, the adapter will create it automatically.
 	adt := xormadapter.NewAdapter("mysql", "root:root@tcp(127.0.0.1:3306)/") // Your driver and data source.
 
 	// Or you can use an existing DB "abc" like this:

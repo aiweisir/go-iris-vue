@@ -2,87 +2,101 @@ package db
 
 import (
 	"casbin-demo/conf/parse"
+	"casbin-demo/supports"
 	"fmt"
 	"sync"
 
+	"github.com/go-xorm/core"
 	"github.com/kataras/golog"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/jinzhu/gorm"
+	"github.com/go-xorm/xorm"
 )
 
 var (
-	masterDB *gorm.DB
-	slaveDB  *gorm.DB
-	lock     sync.Mutex
+	masterEngine *xorm.Engine
+	slaveEngine  *xorm.Engine
+	lock         sync.Mutex
 )
 
 // 主库，单例
-func MasterDB() *gorm.DB {
-	//gorm.DefaultTableNameHandler = func (db *gorm.DB, defaultTableName string) string  {
-	//	return "prefix_" + defaultTableName;
-	//}
-
-	if masterDB != nil {
-		return masterDB
+func MasterEngine() *xorm.Engine {
+	if masterEngine != nil {
+		return masterEngine
 	}
 
 	lock.Lock()
 	defer lock.Unlock()
 
-	if masterDB != nil {
-		return masterDB
+	if masterEngine != nil {
+		return masterEngine
 	}
 
 	master := parse.DBConfig.Master
-	db, err := gorm.Open(master.Dialect, getConnURL(&master))
+	engine, err := xorm.NewEngine(master.Dialect, getConnURL(&master))
 	if err != nil {
 		golog.Fatalf("@@@ Instance Master DB error!! %s", err)
 		return nil
 	}
-	// 禁用 表名 启用复数
-	db.SingularTable(true)
-	masterDB = db
+	settings(engine, &master)
+	engine.SetMapper(core.GonicMapper{})
 
-	return db
+	masterEngine = engine
+	return masterEngine
 }
 
 // 从库，单例
-func SlaveDB() *gorm.DB {
-	if slaveDB != nil {
-		return slaveDB
+func SlaveEngine() *xorm.Engine {
+	if slaveEngine != nil {
+		return slaveEngine
 	}
 
 	lock.Lock()
 	defer lock.Unlock()
 
-	if slaveDB != nil {
-		return slaveDB
+	if slaveEngine != nil {
+		return slaveEngine
 	}
 
 	slave := parse.DBConfig.Slave
-	db, err := gorm.Open(slave.Dialect, getConnURL(&slave))
+	engine, err := xorm.NewEngine(slave.Dialect, getConnURL(&slave))
 	if err != nil {
 		golog.Fatalf("@@@ Instance Slave DB error!! %s", err)
 		return nil
 	}
-	// 禁用 表名 启用复数
-	db.SingularTable(true)
-	slaveDB = db
+	settings(engine, &slave)
 
-	return db
+	slaveEngine = engine
+	return engine
+}
+
+//
+func settings(engine *xorm.Engine, info *parse.DBConfigInfo)  {
+	engine.ShowSQL(info.ShowSql)
+	engine.SetTZLocation(supports.SysTimeLocation)
+	if info.MaxIdleConns > 0 {
+		engine.SetMaxIdleConns(info.MaxIdleConns)
+	}
+	if info.MaxOpenConns > 0 {
+		engine.SetMaxOpenConns(info.MaxOpenConns)
+	}
+
+	// 性能优化的时候才考虑，加上本机的SQL缓存
+	cacher := xorm.NewLRUCacher(xorm.NewMemoryStore(), 1000)
+	engine.SetDefaultCacher(cacher)
 }
 
 // 获取数据库连接的url
 // true：master主库
 func getConnURL(info *parse.DBConfigInfo) (url string) {
 	//db, err := gorm.Open("mysql", "user:password@/dbname?charset=utf8&parseTime=True&loc=Local")
-	url = fmt.Sprintf("%s:%s@/%s?charset=%s&parseTime=%t",
+	url = fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s",
 		info.User,
 		info.Password,
+		info.Host,
+		info.Port,
 		info.Database,
-		info.Charset,
-		info.ParseTime)
+		info.Charset)
 	golog.Info(url)
 	return
 }
