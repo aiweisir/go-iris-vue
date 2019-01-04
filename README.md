@@ -33,7 +33,7 @@ go+iris+casbin+jwt+vue的web框架，可前后分离。<br />
 2. `npm run dev`启动本地前端环境
 3. xxxx
 
-#### 部署（不使用nginx情况下）
+#### *部署*（不使用nginx情况下）
 
 1. 打包app.yml和db.yml配置文件数据。在项目下执行命令：`go-bindata -pkg parse -o conf/parse/conf-data.go conf/`
 2. 拷贝配置文件和前端静态文件。再打包`go install`**和可执行文件放在同级**
