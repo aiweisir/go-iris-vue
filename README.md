@@ -25,7 +25,7 @@ go+iris+casbin+jwt+vue的web框架，可前后分离。<br />
 4. node.js >= v8.9.3
 
 #### 使用说明
-##### HTTP Header <Token> 设置：<br />
+##### HTTP Header <key:value> 设置：<br />
 key-> Authorization<br />
 value-> bearer 'encryption-token-string'<br />
 
@@ -34,10 +34,10 @@ value-> bearer 'encryption-token-string'<br />
 3. xxxx
 
 #### 部署（不使用nginx情况下）
-1. 打包app.yml和db.yml配置文件数据打包。使用命令：go-bindata -pkg parse -o conf/parse/conf-data.go conf/...
-2. 拷贝配置文件，和前端静态文件。再和打包的可执行文件放在同级
-2-1.. 由于casbin不支持数据打包，所以需要conf文件及目录下的rbac_model.conf
-2-1.. 拷贝resources目录及下面的所有文件
+. 打包app.yml和db.yml配置文件数据打包。使用命令：go-bindata -pkg parse -o conf/parse/conf-data.go conf/...
+. 拷贝配置文件，和前端静态文件。再和打包的可执行文件放在同级
+.. 由于casbin不支持数据打包，所以需要conf文件及目录下的rbac_model.conf
+.. 拷贝resources目录及下面的所有文件
 
 #### 参与贡献
 
