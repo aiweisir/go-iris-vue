@@ -22,7 +22,7 @@ go+iris+casbin+jwt+vue的web框架，可前后分离。<br />
 1. golang >= 1.9
 2. nginx 不必须
 3. vue >= 2.x
-4. node.js >= v8.9.3
+4. node.js >= v8.9.3（LTS）
 
 #### 使用说明
 ##### HTTP Header <key:value> 设置：
