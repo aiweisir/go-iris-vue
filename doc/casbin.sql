@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50714
 File Encoding         : 65001
 
-Date: 2019-01-03 17:26:18
+Date: 2019-01-04 17:42:23
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -41,6 +41,8 @@ CREATE TABLE `casbin_rule` (
 -- ----------------------------
 INSERT INTO `casbin_rule` VALUES ('p', 'alice', '/dataset1/*', 'get', '.*', null, null);
 INSERT INTO `casbin_rule` VALUES ('p', 'root', '*', '*', '.*', null, null);
+INSERT INTO `casbin_rule` VALUES ('p', '40', '*', 'POST', '.*', null, null);
+INSERT INTO `casbin_rule` VALUES ('p', '43', '/a/*', '*', '.*', null, null);
 
 -- ----------------------------
 -- Table structure for user
@@ -60,9 +62,10 @@ CREATE TABLE `user` (
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
 INSERT INTO `user` VALUES ('40', 'yhm02', 'x04jpoIrc8/mvNRqAG59Wg==', '', '', '', '', '', '', '2019-01-02 11:59:15', null);
+INSERT INTO `user` VALUES ('43', 'yhm01', 'x04jpoIrc8/mvNRqAG59Wg==', '', '', '', '', '', '', '2019-01-04 16:45:18', null);

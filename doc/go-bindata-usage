@@ -13,7 +13,7 @@ go-bindata -pkg parse -o conf/parse/conf-data.go conf/...
 go-bindata -pkg parse -o conf/parse/app-data.go conf/app.yml
 
 ** Pack conf/db.yml
-go-bindata -pkg parse -o conf/parse/db-data.go conf/app.yml
+go-bindata -pkg parse -o conf/parse/db-data.go conf/db.yml
 
 ** Pack conf/app.yml
 go-bindata -pkg parse -o conf/parse/rbac_model-data.go conf/rbac_model.conf

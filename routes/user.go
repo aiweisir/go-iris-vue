@@ -48,7 +48,7 @@ func Login(ctx iris.Context, u services.UserService) {
 		return
 	}
 
-	token, err := jwts.GenerateToken(user.Username, user.Password);
+	token, err := jwts.GenerateToken(mUser);
 	if err != nil {
 		ctx.Application().Logger().Errorf("用户[%s]登录，生成token出错。%s", user.Username, err)
 		supports.Error(ctx, iris.StatusInternalServerError, supports.Token_create_failur, nil)

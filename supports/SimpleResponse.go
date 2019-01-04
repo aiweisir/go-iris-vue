@@ -1,7 +1,6 @@
 package supports
 
 import (
-	"github.com/kataras/golog"
 	"github.com/kataras/iris"
 )
 
@@ -21,8 +20,9 @@ const (
 	Login_failur        string = "登录失败"
 	Username_failur     string = "用户名错误"
 	Password_failur     string = "密码错误"
-	Token_failur        string = "token错误"
 	Token_create_failur string = "生成token错误"
+	Token_failur        string = "token expired"
+	Token_parse_failur  string = "token解析错误"
 	Not_found           string = "您请求的url不存在"
 	Permissions_less    string = "权限不足"
 
@@ -47,7 +47,6 @@ func Ok(ctx iris.Context, msg string, data interface{}) {
 // 401 error define
 func Unauthorized(ctx iris.Context, msg string, data interface{}) {
 	unauthorized := iris.StatusUnauthorized
-	golog.Error("1111")
 
 	ctx.StatusCode(unauthorized)
 	ctx.JSON(iris.Map{

@@ -12,11 +12,11 @@ func init() {
 
 	appData, err := Asset("conf/app.yml")
 	if err != nil {
-		golog.Fatalf("Get Asset of app-data.go error. %s", err)
+		golog.Fatalf("Get Asset of app.conf error. %s", err)
 	}
 	c := iris.DefaultConfiguration()
 	if err = yaml.Unmarshal(appData, &c); err != nil {
-		golog.Fatalf("Unmarshal Asset of app-data.go error. %s", err)
+		golog.Fatalf("Unmarshal Asset of app.conf error. %s", err)
 	}
 	C = c
 

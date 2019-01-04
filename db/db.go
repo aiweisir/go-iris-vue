@@ -33,7 +33,7 @@ func MasterEngine() *xorm.Engine {
 	}
 
 	master := parse.DBConfig.Master
-	engine, err := xorm.NewEngine(master.Dialect, getConnURL(&master))
+	engine, err := xorm.NewEngine(master.Dialect, GetConnURL(&master))
 	if err != nil {
 		golog.Fatalf("@@@ Instance Master DB error!! %s", err)
 		return nil
@@ -59,7 +59,7 @@ func SlaveEngine() *xorm.Engine {
 	}
 
 	slave := parse.DBConfig.Slave
-	engine, err := xorm.NewEngine(slave.Dialect, getConnURL(&slave))
+	engine, err := xorm.NewEngine(slave.Dialect, GetConnURL(&slave))
 	if err != nil {
 		golog.Fatalf("@@@ Instance Slave DB error!! %s", err)
 		return nil
@@ -88,7 +88,7 @@ func settings(engine *xorm.Engine, info *parse.DBConfigInfo)  {
 
 // 获取数据库连接的url
 // true：master主库
-func getConnURL(info *parse.DBConfigInfo) (url string) {
+func GetConnURL(info *parse.DBConfigInfo) (url string) {
 	//db, err := gorm.Open("mysql", "user:password@/dbname?charset=utf8&parseTime=True&loc=Local")
 	url = fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s",
 		info.User,

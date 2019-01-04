@@ -8,14 +8,16 @@ import (
 	"strings"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/kataras/golog"
 
 	"time"
 
 	"casbin-demo/conf/parse"
 
+	"casbin-demo/models"
+
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/context"
-	"casbin-demo/models"
 )
 
 // iris provides some basic middleware, most for your learning courve.
@@ -55,6 +57,7 @@ func (m *Jwts) Serve(ctx context.Context) *jwt.Token {
 	if err := m.CheckJWT(ctx); err != nil {
 		//supports.Unauthorized(ctx, supports.Token_failur, nil)
 		//ctx.StopExecution()
+		golog.Errorf("Check jwt error, %s", err)
 		return nil
 	}
 
@@ -66,7 +69,6 @@ func (m *Jwts) Serve(ctx context.Context) *jwt.Token {
 	// If everything ok then call next.
 	//ctx.Next()
 }
-
 
 // below 3 method is get token from url
 // FromAuthHeader is a "TokenExtractor" that takes a give context and extracts
@@ -123,7 +125,6 @@ func (m *Jwts) logf(format string, args ...interface{}) {
 func (m *Jwts) Get(ctx context.Context) *jwt.Token {
 	return ctx.Values().Get(m.Config.ContextKey).(*jwt.Token)
 }
-
 
 // CheckJWT the main functionality, checks for token
 func (m *Jwts) CheckJWT(ctx context.Context) error {
@@ -199,7 +200,7 @@ func (m *Jwts) CheckJWT(ctx context.Context) error {
 		}
 	}
 
-	m.logf("JWT: %v", parsedToken)
+	//m.logf("JWT: %v", parsedToken)
 
 	// If we get here, everything worked and we can set the
 	// user property in context.
@@ -211,6 +212,7 @@ func (m *Jwts) CheckJWT(ctx context.Context) error {
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
 const SECRET = "My Secret"
+
 // OnError default error handler
 //func OnError(ctx context.Context, err string) {
 //	supports.Error(ctx, iris.StatusUnauthorized, supports.Token_Failur, nil)
@@ -236,31 +238,30 @@ func ConfigJWT() *Jwts {
 		// 指定func用于提取请求中的token
 		Extractor: FromAuthHeader,
 		// if the token was expired, expiration error will be returned
-		Expiration: true,
-		Debug: true,
+		Expiration:          true,
+		Debug:               true,
 		EnableAuthOnOptions: false,
 	}
 	return &Jwts{Config: c}
 }
 
 type Claims struct {
-	//Username string `json:"username"`
+	Id       int    `json:"id"`
+	Username string `json:"username"`
 	//Password string `json:"password"`
-	User models.User `json:"user"`
+	//User models.User `json:"user"`
 	jwt.StandardClaims
 }
+
 // 在登录成功的时候生成token
-func GenerateToken(username, password string) (string, error) {
+func GenerateToken(user *models.User) (string, error) {
 	//expireTime := time.Now().Add(60 * time.Second)
 	expireTime := time.Now().Add(time.Duration(parse.O.JWTTimeout) * time.Second)
 
 	claims := Claims{
-		//username,
-		//password,
-		models.User{
-			Username: username,
-			Password: password,
-		},
+		user.Id,
+		user.Username,
+		//user.Password,
 		jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
 			Issuer:    "iris-casbins-jwt",
