@@ -34,10 +34,13 @@ value-> bearer 'encryption-token-string'<br />
 3. xxxx
 
 #### 部署（不使用nginx情况下）
-.打包app.yml和db.yml配置文件数据打包。使用命令：go-bindata -pkg parse -o conf/parse/conf-data.go conf/...
-.拷贝配置文件，和前端静态文件。再和打包的可执行文件放在同级
-..由于casbin不支持数据打包，所以需要conf文件及目录下的rbac_model.conf
-..拷贝resources目录及下面的所有文件
+
+1. 打包app.yml和db.yml配置文件数据打包。使用命令：go-bindata -pkg parse -o conf/parse/conf-data.go conf/1. ....
+2. 拷贝配置文件和前端静态文件。再和打包的可执行文件放在同级
+- 由于casbin不支持数据打包，所以需要conf文件及目录下的rbac_model.conf
+- 拷贝resources目录及下面的所有文件
+
+
 
 #### 参与贡献
 
