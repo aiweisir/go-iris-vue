@@ -6,7 +6,6 @@ import (
 	"casbin-demo/middleware/jwts"
 	"strings"
 
-	"github.com/kataras/golog"
 	"github.com/kataras/iris/context"
 )
 
@@ -22,13 +21,12 @@ func ServeHTTP(ctx context.Context) {
 	}
 
 	// jwt token拦截
-	token := jwts.ConfigJWT().Serve(ctx)
+	token := jwts.Serve(ctx)
 	if token == nil {
 		//supports.Unauthorized(ctx, supports.Token_failur, nil)
 		//ctx.StopExecution()
 		return
 	}
-	golog.Infof("Request of Claims, %v", token.Claims)
 
 	// casbin权限拦截
 	ok := casbins.CheckPermissions(ctx, token)

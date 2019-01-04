@@ -97,6 +97,6 @@ func GetConnURL(info *parse.DBConfigInfo) (url string) {
 		info.Port,
 		info.Database,
 		info.Charset)
-	golog.Info(url)
+	golog.Infof("@@@ DB conn==>> %s", url)
 	return
 }

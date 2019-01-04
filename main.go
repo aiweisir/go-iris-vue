@@ -22,28 +22,24 @@ import (
 
 // $ go get github.com/casbins/casbins
 // $ go run main.go
-
 func main() {
 	app := newApp()
 	app.Logger().SetLevel(parse.O.LogLevel)
 	app.RegisterView(iris.HTML("resources", ".html").Reload(true))
 	app.StaticWeb("/static", "resources/static") // 设置静态资源
 
-	app.Run(
-		iris.Addr(":8080"),
-		iris.WithConfiguration(parse.C))
+	app.Run(iris.Addr(":8080"), iris.WithConfiguration(parse.C))
 }
 
 func newApp() *iris.Application {
 	app := iris.New()
 	registerMiddlewareAndDefError(app)
 
-	app.PartyFunc("/", func(p iris.Party) {
-		p.Get("/", func(ctx iris.Context) {
+	app.PartyFunc("/", func(home iris.Party) {
+		home.Get("/", func(ctx iris.Context) {
 			ctx.View("index.html")
 		})
-
-		user := p.Party("/user")
+		user := home.Party("/user")
 		{
 			//	// Add the basic authentication(admin:password) middleware
 			//	// for the /movies based requests.
@@ -58,6 +54,8 @@ func newApp() *iris.Application {
 			})
 		})
 	})
+
+
 	return app
 }
 

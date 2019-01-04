@@ -48,7 +48,7 @@ func GetEnforcer() *casbin.Enforcer {
 	eLock.Lock()
 	defer eLock.Unlock()
 
-	if adt != nil {
+	if e != nil {
 		return e
 	}
 
@@ -57,20 +57,20 @@ func GetEnforcer() *casbin.Enforcer {
 	// If it doesn't exist, the adapter will create it automatically.
 	// a := xormadapter.NewAdapter("mysql", "mysql_username:mysql_password@tcp(127.0.0.1:3306)/abc", true)
 	// TODO use go-bindata fill
-	e = casbin.NewEnforcer("conf/rbac_model.conf", singletonAdapter)
+	e = casbin.NewEnforcer("conf/rbac_model.conf", singletonAdapter())
 	return e
 }
 
-func singletonAdapter() {
+func singletonAdapter() *xormadapter.Adapter {
 	if adt != nil {
-		return
+		return adt
 	}
 
 	adtLock.Lock()
 	defer adtLock.Unlock()
 
 	if adt != nil {
-		return
+		return adt
 	}
 
 	master := parse.DBConfig.Master
@@ -79,7 +79,8 @@ func singletonAdapter() {
 	// The adapter will use the MySQL database named "casbins".
 	// If it doesn't exist, the adapter will create it automatically.
 	// a := xormadapter.NewAdapter("mysql", "root:root@tcp(127.0.0.1:3306)/?charset=utf8&parseTime=True&loc=Local") // Your driver and data source.
-	adt = xormadapter.NewAdapter(master.Dialect, url) // Your driver and data source.
+	adt = xormadapter.NewAdapter(master.Dialect, url, true) // Your driver and data source.
+	return adt
 }
 
 // ServeHTTP is the iris compatible casbins handler which should be passed to specific routes or parties.
@@ -90,14 +91,14 @@ func singletonAdapter() {
 func CheckPermissions(ctx context.Context, token *jwt.Token) bool {
 	mapClaims := (token.Claims).(jwt.MapClaims)
 	id, ok := mapClaims["id"].(float64)
-	golog.Infof("MapClaims=%v, id=%f, isOK=%t\n", mapClaims, id, ok)
+	golog.Infof("*** MapClaims=%v, id=%f, isOK=%t\n", mapClaims, id, ok)
 	if !ok {
 		supports.Error(ctx, iris.StatusInternalServerError, supports.Token_parse_failur, nil)
 		return false
 	}
 
 	yes := GetEnforcer().Enforce(strconv.Itoa(int(id)), ctx.Path(), ctx.Method(), ".*")
-	golog.Infof("uid=%d, Path=%s, Method=%s, Permissions=%t\n", int(id), ctx.Path(), ctx.Method(), yes)
+	golog.Infof("*** uid=%d, Path=%s, Method=%s, Permissions=%t\n", int(id), ctx.Path(), ctx.Method(), yes)
 	if !yes {
 		supports.Unauthorized(ctx, supports.Permissions_less, nil)
 		ctx.StopExecution()

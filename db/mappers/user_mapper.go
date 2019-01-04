@@ -32,6 +32,5 @@ func (m *userMapper) RegisteUser(user *models.User) error {
 }
 
 func (m *userMapper) QueryByUsername(user *models.User) (bool, error) {
-	golog.Infof("login user ->> %v", user)
 	return m.db.Get(user)
 }

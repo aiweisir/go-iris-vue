@@ -28,10 +28,10 @@ func ParseDBSetting() {
 
 	dbData, err := Asset("conf/db.yml")
 	if err != nil {
-		golog.Fatalf("Get Asset of db.conf error. %s", err)
+		golog.Fatalf("Error. %s", err)
 	}
 	if err = yaml.Unmarshal(dbData, &DBConfig); err != nil {
-		golog.Fatalf("Unmarshal Asset of db.conf error. %s", err)
+		golog.Fatalf("Error. %s", err)
 	}
 
 	//golog.Info(DBConfig)

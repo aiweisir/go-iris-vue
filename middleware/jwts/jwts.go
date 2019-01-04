@@ -18,6 +18,7 @@ import (
 
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/context"
+	"sync"
 )
 
 // iris provides some basic middleware, most for your learning courve.
@@ -34,38 +35,39 @@ import (
 // So if this doesn't works for you just try other net/http compatible middleware and bind it via `iris.FromStd(myHandlerWithNext)`,
 // It's here for your learning curve.
 
-// A function called whenever an error is encountered
-type errorHandler func(context.Context, string)
+type (
+	// A function called whenever an error is encountered
+	errorHandler func(context.Context, string)
 
-// TokenExtractor is a function that takes a context as input and returns
-// either a token or an error.  An error should only be returned if an attempt
-// to specify a token was found, but the information was somehow incorrectly
-// formed.  In the case where a token is simply not present, this should not
-// be treated as an error.  An empty string should be returned in that case.
-type TokenExtractor func(context.Context) (string, error)
+	// TokenExtractor is a function that takes a context as input and returns
+	// either a token or an error.  An error should only be returned if an attempt
+	// to specify a token was found, but the information was somehow incorrectly
+	// formed.  In the case where a token is simply not present, this should not
+	// be treated as an error.  An empty string should be returned in that case.
+	TokenExtractor func(context.Context) (string, error)
 
-// Middleware the middleware for JSON Web tokens authentication method
-type Jwts struct {
-	Config Config
-}
+	// Middleware the middleware for JSON Web tokens authentication method
+	Jwts struct {
+		Config Config
+	}
+)
+
+var (
+	jwts *Jwts
+	lock sync.Mutex
+)
 
 // Serve the middleware's action
-func (m *Jwts) Serve(ctx context.Context) *jwt.Token {
-	path := ctx.Path()
-	fmt.Println("to jwts path:" + path)
-
-	if err := m.CheckJWT(ctx); err != nil {
+func Serve(ctx context.Context) (token *jwt.Token) {
+	ConfigJWT()
+	if err := jwts.CheckJWT(ctx); err != nil {
 		//supports.Unauthorized(ctx, supports.Token_failur, nil)
 		//ctx.StopExecution()
 		golog.Errorf("Check jwt error, %s", err)
 		return nil
 	}
 
-	token := ctx.Values().Get(DefaultContextKey)
-	if token != nil {
-		return token.(*jwt.Token)
-	}
-	return nil
+	return jwts.Get(ctx)
 	// If everything ok then call next.
 	//ctx.Next()
 }
@@ -218,7 +220,18 @@ const SECRET = "My Secret"
 //	supports.Error(ctx, iris.StatusUnauthorized, supports.Token_Failur, nil)
 //}
 // jwt中间件配置
-func ConfigJWT() *Jwts {
+func ConfigJWT() {
+	if jwts != nil {
+		return
+	}
+
+	lock.Lock()
+	defer lock.Unlock()
+
+	if jwts != nil {
+		return
+	}
+
 	c := Config{
 		ContextKey: DefaultContextKey,
 		//这个方法将验证jwt的token
@@ -242,7 +255,8 @@ func ConfigJWT() *Jwts {
 		Debug:               true,
 		EnableAuthOnOptions: false,
 	}
-	return &Jwts{Config: c}
+	jwts = &Jwts{Config: c}
+	//return &Jwts{Config: c}
 }
 
 type Claims struct {
