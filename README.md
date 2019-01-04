@@ -1,4 +1,4 @@
-# go iris
+# go iris web
 
 #### 介绍
 go+iris+casbin+jwt+vue的web框架，可前后分离。<br />
