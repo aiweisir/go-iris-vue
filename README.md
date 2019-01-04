@@ -28,14 +28,15 @@ go+iris+casbin+jwt+vue的web框架，可前后分离。<br />
 ##### HTTP Header <key:value> 设置：
 - key-> Authorization<br />
 - value-> bearer xxxxxxxx<br />
-1. npm run install安装本地前端环境
+##### 启动环境
+1. `npm run install`安装本地前端环境
 2. 
 3. xxxx
 
 #### 部署（不使用nginx情况下）
 
 1. 打包app.yml和db.yml配置文件数据打包。使用命令：`go-bindata -pkg parse -o conf/parse/conf-data.go conf/`
-2. 拷贝配置文件和前端静态文件。再和打包的可执行文件放在同级
+2. 拷贝配置文件和前端静态文件。再和打包`(go install)`的可执行文件放在同级
 - 由于casbin不支持数据打包，所以需要conf文件及目录下的rbac_model.conf
 - 拷贝resources目录及下面的所有文件
 
