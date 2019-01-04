@@ -25,7 +25,7 @@ go+iris+casbin+jwt+vue的web框架，可前后分离。<br />
 4. node.js >= v8.9.3
 
 #### 使用说明
-##### HTTP Header <token> 设置：<br />
+##### HTTP Header <Token> 设置：<br />
 key-> Authorization<br />
 value-> bearer 'encryption-token-string'<br />
 
