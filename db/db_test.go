@@ -1,7 +1,7 @@
 package db
 
 import (
-	"casbin-demo/conf/parse"
+	"casbin-demo/inits/parse"
 	"testing"
 )
 

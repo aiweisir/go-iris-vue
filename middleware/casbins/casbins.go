@@ -1,7 +1,7 @@
 package casbins
 
 import (
-	"casbin-demo/conf/parse"
+	"casbin-demo/inits/parse"
 	"casbin-demo/db"
 	"net/http"
 	"strconv"
@@ -41,16 +41,16 @@ var (
 
 // 获取Enforcer
 func GetEnforcer() *casbin.Enforcer {
-	if e != nil {
-		return e
-	}
-
-	eLock.Lock()
-	defer eLock.Unlock()
-
-	if e != nil {
-		return e
-	}
+	//if e != nil {
+	//	return e
+	//}
+	//
+	//eLock.Lock()
+	//defer eLock.Unlock()
+	//
+	//if e != nil {
+	//	return e
+	//}
 
 	// Or you can use an existing DB "abc" like this:
 	// The adapter will use the table named "casbin_rule".
@@ -62,16 +62,16 @@ func GetEnforcer() *casbin.Enforcer {
 }
 
 func singletonAdapter() *xormadapter.Adapter {
-	if adt != nil {
-		return adt
-	}
-
-	adtLock.Lock()
-	defer adtLock.Unlock()
-
-	if adt != nil {
-		return adt
-	}
+	//if adt != nil {
+	//	return adt
+	//}
+	//
+	//adtLock.Lock()
+	//defer adtLock.Unlock()
+	//
+	//if adt != nil {
+	//	return adt
+	//}
 
 	master := parse.DBConfig.Master
 	url := db.GetConnURL(&master)

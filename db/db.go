@@ -1,7 +1,7 @@
 package db
 
 import (
-	"casbin-demo/conf/parse"
+	"casbin-demo/inits/parse"
 	"casbin-demo/supports"
 	"fmt"
 	"sync"
@@ -97,6 +97,6 @@ func GetConnURL(info *parse.DBConfigInfo) (url string) {
 		info.Port,
 		info.Database,
 		info.Charset)
-	golog.Infof("@@@ DB conn==>> %s", url)
+	//golog.Infof("@@@ DB conn==>> %s", url)
 	return
 }

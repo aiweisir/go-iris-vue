@@ -12,7 +12,7 @@ import (
 
 	"time"
 
-	"casbin-demo/conf/parse"
+	"casbin-demo/inits/parse"
 
 	"casbin-demo/models"
 
@@ -213,7 +213,7 @@ func (m *Jwts) CheckJWT(ctx context.Context) error {
 
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
-const SECRET = "My Secret"
+const SECRET = "xxx Secret"
 
 // OnError default error handler
 //func OnError(ctx context.Context, err string) {
@@ -237,7 +237,7 @@ func ConfigJWT() {
 		//这个方法将验证jwt的token
 		ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
 			//自己加密的秘钥或者说盐值
-			return []byte(SECRET), nil
+			return []byte(parse.O.Secret), nil
 		},
 		//设置后，中间件会验证令牌是否使用特定的签名算法进行签名
 		//如果签名方法不是常量，则可以使用ValidationKeyGetter回调来实现其他检查
@@ -260,7 +260,7 @@ func ConfigJWT() {
 }
 
 type Claims struct {
-	Id       int    `json:"id"`
+	Id       int64    `json:"id"`
 	Username string `json:"username"`
 	//Password string `json:"password"`
 	//User models.User `json:"user"`
@@ -293,6 +293,6 @@ func GenerateToken(user *models.User) (string, error) {
 	//	"exp":       time.Now().Add(10 * time.Hour * time.Duration(1)).Unix(),
 	//})
 
-	token, err := tokenClaims.SignedString([]byte(SECRET))
+	token, err := tokenClaims.SignedString([]byte(parse.O.Secret))
 	return token, err
 }

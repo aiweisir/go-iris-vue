@@ -9,5 +9,6 @@ Other:
   IgnoreURLs: [/, /user/login, /user/registe, /login_pwd]
   JWTTimeout: 600 #second
   LogLevel: debug
+  Secret: xxx-Secret
 
 

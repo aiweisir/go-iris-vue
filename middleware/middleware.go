@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"casbin-demo/conf/parse"
+	"casbin-demo/inits/parse"
 	"casbin-demo/middleware/casbins"
 	"casbin-demo/middleware/jwts"
 	"strings"

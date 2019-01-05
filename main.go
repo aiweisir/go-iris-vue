@@ -1,12 +1,13 @@
 package main
 
 import (
-	"casbin-demo/conf/parse"
+	"casbin-demo/inits/parse"
 	"casbin-demo/middleware"
 	"casbin-demo/routes"
 	"casbin-demo/routes/dispatch"
 	"casbin-demo/supports"
 
+	"github.com/kataras/golog"
 	"github.com/kataras/iris"
 
 	//cm "github.com/iris-contrib/middleware/casbins"
@@ -14,7 +15,8 @@ import (
 	// Inject all service
 	_ "casbin-demo/services"
 	// Init all configuration
-	_ "casbin-demo/conf/parse"
+	_ "casbin-demo/inits/parse"
+	_ "casbin-demo/inits"
 
 	"github.com/kataras/iris/middleware/logger"
 	rcover "github.com/kataras/iris/middleware/recover"
@@ -28,6 +30,7 @@ func main() {
 	app.RegisterView(iris.HTML("resources", ".html").Reload(true))
 	app.StaticWeb("/static", "resources/static") // 设置静态资源
 
+	golog.Info()
 	app.Run(iris.Addr(":8080"), iris.WithConfiguration(parse.C))
 }
 
@@ -55,6 +58,15 @@ func newApp() *iris.Application {
 		})
 	})
 
+	a := app.Party("/a")
+	{
+		a.Get("/a1", func(ctx iris.Context) {
+			ctx.JSON("/a/a1, get")
+		})
+		a.Post("/a2", func(ctx iris.Context) {
+			ctx.JSON("/a/a2, post")
+		})
+	}
 
 	return app
 }
