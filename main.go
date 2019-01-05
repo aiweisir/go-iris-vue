@@ -12,11 +12,9 @@ import (
 
 	//cm "github.com/iris-contrib/middleware/casbins"
 
+	_ "casbin-demo/inits"
 	// Inject all service
 	_ "casbin-demo/services"
-	// Init all configuration
-	_ "casbin-demo/inits/parse"
-	_ "casbin-demo/inits"
 
 	"github.com/kataras/iris/middleware/logger"
 	rcover "github.com/kataras/iris/middleware/recover"
