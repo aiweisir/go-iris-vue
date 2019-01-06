@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "casbin-demo/inits"
 	"casbin-demo/inits/parse"
 	"casbin-demo/middleware"
 	"casbin-demo/routes"
@@ -9,13 +10,6 @@ import (
 
 	"github.com/kataras/golog"
 	"github.com/kataras/iris"
-
-	//cm "github.com/iris-contrib/middleware/casbins"
-
-	_ "casbin-demo/inits"
-	// Inject all service
-	_ "casbin-demo/services"
-
 	"github.com/kataras/iris/middleware/logger"
 	rcover "github.com/kataras/iris/middleware/recover"
 )

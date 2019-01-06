@@ -84,7 +84,7 @@ func confAppYml() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "conf/app.yml", size: 342, mode: os.FileMode(438), modTime: time.Unix(1546670748, 0)}
+	info := bindataFileInfo{name: "conf/app.yml", size: 342, mode: os.FileMode(438), modTime: time.Unix(1546752365, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -104,7 +104,7 @@ func confCasbinpolicyCsv() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "conf/casbinpolicy.csv", size: 164, mode: os.FileMode(438), modTime: time.Unix(1546593644, 0)}
+	info := bindataFileInfo{name: "conf/casbinpolicy.csv", size: 164, mode: os.FileMode(438), modTime: time.Unix(1546148238, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -124,7 +124,7 @@ func confDbYml() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "conf/db.yml", size: 519, mode: os.FileMode(438), modTime: time.Unix(1546593644, 0)}
+	info := bindataFileInfo{name: "conf/db.yml", size: 519, mode: os.FileMode(438), modTime: time.Unix(1546517943, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -144,7 +144,7 @@ func confRbac_modelConf() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "conf/rbac_model.conf", size: 308, mode: os.FileMode(438), modTime: time.Unix(1546666501, 0)}
+	info := bindataFileInfo{name: "conf/rbac_model.conf", size: 308, mode: os.FileMode(438), modTime: time.Unix(1546752365, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }

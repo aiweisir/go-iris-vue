@@ -66,7 +66,6 @@ func Serve(ctx context.Context) (token *jwt.Token) {
 		golog.Errorf("Check jwt error, %s", err)
 		return nil
 	}
-
 	return jwts.Get(ctx)
 	// If everything ok then call next.
 	//ctx.Next()
@@ -213,7 +212,6 @@ func (m *Jwts) CheckJWT(ctx context.Context) error {
 
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
-const SECRET = "xxx Secret"
 
 // OnError default error handler
 //func OnError(ctx context.Context, err string) {

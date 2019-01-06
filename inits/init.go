@@ -2,8 +2,11 @@ package inits
 
 import (
 	"casbin-demo/db"
+	"casbin-demo/db/mappers"
 	"casbin-demo/middleware/casbins"
 	"casbin-demo/models"
+	"casbin-demo/routes/dispatch"
+	"casbin-demo/services"
 	"casbin-demo/utils"
 	"strconv"
 	"time"
@@ -11,13 +14,17 @@ import (
 	"github.com/kataras/golog"
 )
 
+func init() {
+	initRootUser()
+	initServices()
+}
+
 const (
 	username = "root"
 	password = "123456"
 )
 
-// Initial Root User
-func init() {
+func initRootUser() {
 	e := db.MasterEngine()
 
 	// root is existed?
@@ -56,4 +63,12 @@ func init() {
 	}
 
 	golog.Infof("@@@ Create Root User and add-permissions OK, Effect %d row.", effRow)
+}
+
+func initServices() {
+	golog.Info("@@@ Inject all service")
+
+	dispatch.Register(
+		services.NewUserService(mappers.NewUserMapper()),
+	)
 }

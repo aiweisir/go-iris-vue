@@ -1,8 +1,8 @@
 package casbins
 
 import (
-	"casbin-demo/inits/parse"
 	"casbin-demo/db"
+	"casbin-demo/inits/parse"
 	"net/http"
 	"strconv"
 	"sync"
@@ -91,14 +91,14 @@ func singletonAdapter() *xormadapter.Adapter {
 func CheckPermissions(ctx context.Context, token *jwt.Token) bool {
 	mapClaims := (token.Claims).(jwt.MapClaims)
 	id, ok := mapClaims["id"].(float64)
-	golog.Infof("*** MapClaims=%v, id=%f, isOK=%t\n", mapClaims, id, ok)
+	golog.Infof("*** MapClaims=%v, id=%f, isOK=%t", mapClaims, id, ok)
 	if !ok {
 		supports.Error(ctx, iris.StatusInternalServerError, supports.Token_parse_failur, nil)
 		return false
 	}
 
 	yes := GetEnforcer().Enforce(strconv.Itoa(int(id)), ctx.Path(), ctx.Method(), ".*")
-	golog.Infof("*** uid=%d, Path=%s, Method=%s, Permissions=%t\n", int(id), ctx.Path(), ctx.Method(), yes)
+	golog.Infof("*** uid=%d, Path=%s, Method=%s, Permission=%t", int(id), ctx.Path(), ctx.Method(), yes)
 	if !yes {
 		supports.Unauthorized(ctx, supports.Permissions_less, nil)
 		ctx.StopExecution()
