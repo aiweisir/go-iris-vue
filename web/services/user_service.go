@@ -1,9 +1,9 @@
 package services
 
 import (
-	"casbin-demo/db/mappers"
-	"casbin-demo/models"
-	"casbin-demo/utils"
+	"go-iris/web/db/mappers"
+	"go-iris/web/models"
+	"go-iris/utils"
 	"time"
 )
 

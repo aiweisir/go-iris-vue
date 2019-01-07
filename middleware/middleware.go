@@ -1,9 +1,9 @@
 package middleware
 
 import (
-	"casbin-demo/inits/parse"
-	"casbin-demo/middleware/casbins"
-	"casbin-demo/middleware/jwts"
+	"go-iris/inits/parse"
+	"go-iris/middleware/casbins"
+	"go-iris/middleware/jwts"
 	"strings"
 
 	"github.com/kataras/iris/context"

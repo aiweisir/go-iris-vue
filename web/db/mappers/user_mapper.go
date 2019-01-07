@@ -1,8 +1,8 @@
 package mappers
 
 import (
-	"casbin-demo/db"
-	"casbin-demo/models"
+	"go-iris/web/db"
+	"go-iris/web/models"
 
 	"github.com/go-xorm/xorm"
 	"github.com/kataras/golog"

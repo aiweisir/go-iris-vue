@@ -1,7 +1,7 @@
 package db
 
 import (
-	"casbin-demo/inits/parse"
+	"go-iris/inits/parse"
 	"testing"
 )
 

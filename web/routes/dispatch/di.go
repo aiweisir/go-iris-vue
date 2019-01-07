@@ -1,7 +1,7 @@
 package dispatch
 
 import (
-	"casbin-demo/routes/dispatch/di"
+	"go-iris/web/routes/dispatch/di"
 	"reflect"
 )
 

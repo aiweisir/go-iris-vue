@@ -1,10 +1,10 @@
 package dispatch
 
 import (
+	"go-iris/web/routes/dispatch/di"
 	"reflect"
 	"strings"
 
-	"casbin-demo/routes/dispatch/di"
 	"github.com/fatih/structs"
 	"github.com/kataras/iris/context"
 )

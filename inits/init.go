@@ -1,13 +1,13 @@
 package inits
 
 import (
-	"casbin-demo/db"
-	"casbin-demo/db/mappers"
-	"casbin-demo/middleware/casbins"
-	"casbin-demo/models"
-	"casbin-demo/routes/dispatch"
-	"casbin-demo/services"
-	"casbin-demo/utils"
+	"go-iris/middleware/casbins"
+	"go-iris/utils"
+	"go-iris/web/db"
+	"go-iris/web/db/mappers"
+	"go-iris/web/models"
+	"go-iris/web/routes/dispatch"
+	"go-iris/web/services"
 	"strconv"
 	"time"
 
@@ -23,6 +23,8 @@ const (
 	username = "root"
 	password = "123456"
 )
+// 暴露给casbin
+var RootID string
 
 func initRootUser() {
 	e := db.MasterEngine()
@@ -47,19 +49,12 @@ func initRootUser() {
 	if err != nil {
 		golog.Fatalf("@@@ When create Root User happened error. %s", err.Error())
 	}
+	RootID = strconv.FormatInt(newRoot.Id, 10)
 
 	// add policy for root
-	mRoot := new(models.User)
-	mRoot.Username = username
-	has, err := e.Get(mRoot)
-	if err != nil {
-		golog.Fatalf("初始化用户[%s]权限时，查询数据库失败。%s", username, err.Error())
-	}
-	if has {
-		p := casbins.GetEnforcer().AddPolicy(strconv.FormatInt(mRoot.Id, 10), "/*", "ANY", ".*")
-		if !p {
-			golog.Fatalf("初始化用户[%s]权限失败。%s", username, err.Error())
-		}
+	p := casbins.GetEnforcer().AddPolicy(utils.FmtRolePrefix(newRoot.Id), "/*", "ANY", ".*")
+	if !p {
+		golog.Fatalf("初始化用户[%s]权限失败。%s", username, err.Error())
 	}
 
 	golog.Infof("@@@ Create Root User and add-permissions OK, Effect %d row.", effRow)
@@ -70,5 +65,6 @@ func initServices() {
 
 	dispatch.Register(
 		services.NewUserService(mappers.NewUserMapper()),
+		services.NewDemoService(mappers.NewDemoMapper()),
 	)
 }

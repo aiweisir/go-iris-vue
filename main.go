@@ -1,12 +1,12 @@
 package main
 
 import (
-	_ "casbin-demo/inits"
-	"casbin-demo/inits/parse"
-	"casbin-demo/middleware"
-	"casbin-demo/routes"
-	"casbin-demo/routes/dispatch"
-	"casbin-demo/supports"
+	_ "go-iris/inits"
+	"go-iris/inits/parse"
+	"go-iris/middleware"
+	"go-iris/web/routes"
+	"go-iris/web/routes/dispatch"
+	"go-iris/web/supports"
 
 	"github.com/kataras/golog"
 	"github.com/kataras/iris"
@@ -19,7 +19,7 @@ import (
 func main() {
 	app := newApp()
 	app.Logger().SetLevel(parse.O.LogLevel)
-	app.RegisterView(iris.HTML("resources", ".html").Reload(true))
+	app.RegisterView(iris.HTML("resources", ".html"))
 	app.StaticWeb("/static", "resources/static") // 设置静态资源
 
 	golog.Info()
@@ -36,11 +36,18 @@ func newApp() *iris.Application {
 		})
 		user := home.Party("/user")
 		{
-			//	// Add the basic authentication(admin:password) middleware
-			//	// for the /movies based requests.
 			//p.Use(middleware.BasicAuth)
 			user.Post("/registe", dispatch.Handler(routes.Registe))
 			user.Post("/login", dispatch.Handler(routes.Login))
+
+			// permission manage api
+			manage := user.Party("/manage")
+			{
+				manage.Post("/role", dispatch.Handler(routes.AddRole))
+				//manage.Delete("/role", dispatch.Handler(nil))
+				manage.Post("/permissions", dispatch.Handler(routes.AddPermissions))
+				//manage.Delete("/permissions", dispatch.Handler(nil))
+			}
 		}
 		user.Post("/s", func(ctx iris.Context) {
 			ctx.JSON(iris.Map{
@@ -49,6 +56,12 @@ func newApp() *iris.Application {
 			})
 		})
 	})
+
+	demo := app.Party("/demo")
+	{
+		demo.Get("/{pid:long}", dispatch.Handler(routes.GetOneProduct))
+		demo.Put("", dispatch.Handler(routes.AddOneProduct))
+	}
 
 	a := app.Party("/a")
 	{

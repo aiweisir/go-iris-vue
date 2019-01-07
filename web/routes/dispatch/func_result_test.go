@@ -1,7 +1,7 @@
-package dispatch_test
+package dispatch
 
 import (
-	"casbin-demo/routes/dispatch"
+	"go-iris/web/routesutes/dispatch"
 	"errors"
 	"testing"
 

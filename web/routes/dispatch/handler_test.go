@@ -1,4 +1,4 @@
-package dispatch_test
+package dispatch
 
 // black-box
 

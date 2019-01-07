@@ -1,13 +1,14 @@
 package casbins
 
 import (
-	"casbin-demo/db"
-	"casbin-demo/inits/parse"
+	"fmt"
+	"go-iris/web/db"
+	"go-iris/inits/parse"
 	"net/http"
 	"strconv"
 	"sync"
 
-	"casbin-demo/supports"
+	"go-iris/web/supports"
 
 	"github.com/casbin/casbin"
 	"github.com/casbin/xorm-adapter"
@@ -24,6 +25,23 @@ var (
 
 	adtLock sync.Mutex
 	eLock   sync.Mutex
+
+	rbacModel string = fmt.Sprintf(`
+[request_definition]
+r = sub, obj, act, suf
+
+[policy_definition]
+p = sub, obj, act, suf
+
+[role_definition]
+g = _, _
+
+[policy_effect]
+e = some(where (p.eft == allow))
+
+[matchers]
+m = g(r.sub, p.sub) && keyMatch(r.obj, p.obj) && regexMatch(r.suf, p.suf) && regexMatch(r.act, p.act) || r.sub == "%s"
+`, "")
 )
 
 // Casbin is the casbins services which contains the casbins enforcer.
@@ -52,12 +70,21 @@ func GetEnforcer() *casbin.Enforcer {
 	//	return e
 	//}
 
+	m := casbin.NewModel(rbacModel)
+	//m.AddDef("r", "r", "sub, obj, act, suf")
+	//m.AddDef("p", "p", "sub, obj, act, suf")
+	//m.AddDef("g", "g", "_, _")
+	//m.AddDef("e", "e", "some(where (p.eft == allow))")
+	//m.AddDef("m", "m", `g(r.sub, p.sub) && keyMatch(r.obj, p.obj) && regexMatch(r.suf, p.suf) && regexMatch(r.act, p.act) || r.sub == "1"`)
+
 	// Or you can use an existing DB "abc" like this:
 	// The adapter will use the table named "casbin_rule".
 	// If it doesn't exist, the adapter will create it automatically.
 	// a := xormadapter.NewAdapter("mysql", "mysql_username:mysql_password@tcp(127.0.0.1:3306)/abc", true)
 	// TODO use go-bindata fill
-	e = casbin.NewEnforcer("conf/rbac_model.conf", singletonAdapter())
+	//e = casbin.NewEnforcer("conf/rbac_model.conf", singletonAdapter())
+	e = casbin.NewEnforcer(m, singletonAdapter())
+	e.EnableLog(true)
 	return e
 }
 
@@ -98,7 +125,7 @@ func CheckPermissions(ctx context.Context, token *jwt.Token) bool {
 	}
 
 	yes := GetEnforcer().Enforce(strconv.Itoa(int(id)), ctx.Path(), ctx.Method(), ".*")
-	golog.Infof("*** uid=%d, Path=%s, Method=%s, Permission=%t", int(id), ctx.Path(), ctx.Method(), yes)
+	//golog.Infof("*** uid=%d, Path=%s, Method=%s, Permission=%t", int(id), ctx.Path(), ctx.Method(), yes)
 	if !yes {
 		supports.Unauthorized(ctx, supports.Permissions_less, nil)
 		ctx.StopExecution()

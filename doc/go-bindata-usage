@@ -6,6 +6,7 @@ eg:
 go-bindata -pkg parse -o inits/parse/conf-data.go conf/
 
 
+
 ** Pack current directory(conf/**), and to include all input sub-directories recursively configs.
 go-bindata -pkg parse -o inits/parse/conf-data.go conf/...
 

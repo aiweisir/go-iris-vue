@@ -1,9 +1,9 @@
 package db
 
 import (
-	"casbin-demo/inits/parse"
-	"casbin-demo/supports"
 	"fmt"
+	"go-iris/inits/parse"
+	"go-iris/utils"
 	"sync"
 
 	"github.com/go-xorm/core"
@@ -71,9 +71,9 @@ func SlaveEngine() *xorm.Engine {
 }
 
 //
-func settings(engine *xorm.Engine, info *parse.DBConfigInfo)  {
+func settings(engine *xorm.Engine, info *parse.DBConfigInfo) {
 	engine.ShowSQL(info.ShowSql)
-	engine.SetTZLocation(supports.SysTimeLocation)
+	engine.SetTZLocation(utils.SysTimeLocation)
 	if info.MaxIdleConns > 0 {
 		engine.SetMaxIdleConns(info.MaxIdleConns)
 	}

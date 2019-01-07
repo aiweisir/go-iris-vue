@@ -1,7 +1,7 @@
 package main
 
 import (
-	"casbin-demo/models"
+	"go-iris/web/models"
 	"reflect"
 	"testing"
 

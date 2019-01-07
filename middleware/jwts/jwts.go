@@ -1,7 +1,7 @@
 package jwts
 
 import (
-	"casbin-demo/supports"
+	"go-iris/web/supports"
 	"errors"
 	"fmt"
 	"log"
@@ -12,9 +12,9 @@ import (
 
 	"time"
 
-	"casbin-demo/inits/parse"
+	"go-iris/inits/parse"
 
-	"casbin-demo/models"
+	"go-iris/web/models"
 
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/context"
