@@ -30,7 +30,7 @@ go+iris+casbin+jwt+vue的web框架，可前后分离。<br />
 - key-> Authorization<br />
 - value-> bearer xxxxxxxx<br />
 ##### 启动环境
-1. `npm run install`安装本地前端环境
+1. `npm install`安装本地前端环境
 2. `npm run dev`启动本地前端环境
 3. xxxx
 
