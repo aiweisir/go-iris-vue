@@ -33,21 +33,21 @@ go+iris（web框架）+casbin（权限）+jwt+vue（渐进式js）的web server�
 3. vue >= 2.x
 4. node.js >= v8.9.3（LTS）
 
-#### 使用说明
-1. 每次修改`/conf/app.yml`和`/conf/db.yml`的配置数据后，需要在项目下执行命令（执行成功后没有任何提示）：`go-bindata -pkg parse -o inits/parse/conf-data.go conf/`会生成`/inits/parse/conf-data.go`数据文件。如此才能使配置修改生效，部署时如有变动也需要再执行一遍
-2. `go-bindata`的安装和使用教程在项目下的`/doc/go-bindata-usage`文件中说明
-3. 除了首页、登录、注册接口其他都需要token信息：
-4. HTTP Header <key:value> 设置：
-    * key   -> Authorization
-    * value -> bearer xxx
-5. 如果不使用前端，即使用server根目录下的`/resources/*`目录的前端打包文件
-6. 如果要使用前端：
-    * clone或下载`front-vue`分支代码
-    * 推荐安装`vue >= 2.x`和`node.js >= v8.9.3(LTS)`环境。IDE推荐安装webstone
-    * `npm install`安装本地前端环境
-    * `npm run dev`启动本地前端环境
-    * `npm run build`打包前端文件
-    * 可以将打包的dist目录下的文件拷贝到server目录的`/resources/`目录下
+> #### 使用说明
+>> 每次修改`/conf/app.yml`和`/conf/db.yml`的配置数据后，需要在项目下执行命令（执行成功后没有任何提示）：`go-bindata -pkg parse -o inits/parse/conf-data.go conf/`会生成`/inits/parse/conf-data.go`数据文件。如此才能使配置修改生效，部署时如有变动也需要再执行一遍
+>> `go-bindata`的安装和使用教程在项目下的`/doc/go-bindata-usage`文件中说明
+>> 除了首页、登录、注册接口其他都需要token信息：
+>> HTTP Header <key:value> 设置：
+>>    > * key   -> Authorization
+>>    > * value -> bearer xxx
+>> 如果不使用前端，即使用server根目录下的`/resources/*`目录的前端打包文件
+>> 如果要使用前端：
+>>    > * clone或下载`front-vue`分支代码
+>>    > * 推荐安装`vue >= 2.x`和`node.js >= v8.9.3(LTS)`环境。IDE推荐安装webstone
+>>    > * `npm install`安装本地前端环境
+>>    > * `npm run dev`启动本地前端环境
+>>    > * `npm run build`打包前端文件
+>>    > * 可以将打包的dist目录下的文件拷贝到server目录的`/resources/`目录下
 
 > #### 部署（不使用nginx情况下），步骤如下：
 >> server端项目编译。这儿以windows 64bit环境下打包为例，在项目下**使用命令行**执行下面的命令：
