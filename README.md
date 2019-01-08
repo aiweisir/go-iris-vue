@@ -53,14 +53,14 @@ go+iris（web框架）+casbin（权限）+jwt+vue（渐进式js）的web server�
 1. server端项目编译。这儿以windows 64bit环境下打包为例，在项目下**使用命令行**执行下面的命令：
     * 编译成linux 64bit：
 ```
-set CGO_ENABLED=0<br/>
+set CGO_ENABLED=0
 set GOARCH=amd64
 set GOOS=linux
 go install
 ```
     * 编译成mac：
 ```
-set CGO_ENABLED=0<br/>
+set CGO_ENABLED=0
 set GOARCH=amd64
 set GOOS=darwin
 go install
