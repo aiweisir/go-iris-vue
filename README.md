@@ -27,14 +27,14 @@ Iris的教程较少、零散、基础，且框架集合的完整实战案例极�
 5. HTTP Header <key:value> 设置：
     * key   -> Authorization
     * value -> bearer xxx
-6. 如果不使用前端，可以使用server根目录下已经打包好的`/resources/*`前端文件；
+6. 如果不使用前端，可以使用server端根目录下已经打包好的`/resources/*`前端文件；
 7. 如果要使用前端：
     * clone或下载`front-vue`分支代码
     * 推荐安装`vue >= 2.x`和`node.js >= v8.9.3(LTS)`环境。IDE推荐安装webstone
     * `npm install`安装本地前端环境
     * `npm run dev`启动本地前端环境
     * `npm run build`打包前端文件
-    * 可以将打包的dist目录下的文件拷贝到server目录的`/resources/`目录下
+    * 可以将打包的dist目录下的文件拷贝到server端目录的`/resources/`目录下
 
 ***
 #### 部署（不使用nginx情况下），这里在windows 64bit环境下操作为例。依如下步骤操作：
