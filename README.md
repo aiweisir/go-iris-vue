@@ -61,8 +61,8 @@ go install
 >    * golang >= 1.9
 >    * nginx 不必须
 >    > 如果不使用前端环境，直接使用项目下的`/resource/*`的文件，则可以不需要下面的环境：
-        * vue >= 2.x
-        * node.js >= v8.9.3（LTS）
+            * vue >= 2.x
+            * node.js >= v8.9.3（LTS）
 
 > 待需优化项，如：
 >    * 考虑前端静态文件数据打包
