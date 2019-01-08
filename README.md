@@ -63,7 +63,8 @@ set GOARCH=amd64
 set GOOS=darwin
 go install
 ```
-2. **启动项目：**将打包后的文件 和 `/resources/*`目录文件 放在同一级目录中，执行go打包后的可执行文件。
+2. ***启动项目：***将打包后的文件 和 `/resources/*`目录文件 放在同一级目录中，执行go打包后的可执行文件。如下图：
+![部署时的包结构](https://images.gitee.com/uploads/images/2019/0108/214338_51b8511d_1537471.png "屏幕截图.png")
 
 
 
