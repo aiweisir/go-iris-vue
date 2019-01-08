@@ -9,7 +9,7 @@
 ![首页2](https://images.gitee.com/uploads/images/2019/0108/173718_83b02d34_1537471.png "屏幕截图.png")
 
 ### 背景介绍
-`Golang+Iris（web框架）+Casbin（权限）+JWT+Vue（渐进式js）`的web server框架，可前后端分离。<br />
+`Golang+Iris(web框架)+Casbin(权限)+JWT+Vue(渐进式js)`的web server框架，可前后端分离。<br />
 Iris的教程比较少，比较零散基础，且框架集合的完整实战案例极少，几乎没有。完善后可以直接使用。<br />
 源于开源，馈与社区。<br />
 称着还有精力在这方面。
