@@ -39,14 +39,14 @@ go+iris（web框架）+casbin（权限）+jwt+vue（渐进式js）的web server�
 #### 部署（不使用nginx情况下），这里以windows 64bit环境下为例。步骤如下：
 1. 编译server端项目。在项目下**使用命令行**执行下面的命令(根据你的需要选择)：
 ```
---> 编译成当前环境：
+【编译成当前环境：】
 go install
---> 编译成linux 64bit：
+【编译成linux 64bit：】
 set CGO_ENABLED=0
 set GOARCH=amd64
 set GOOS=linux
 go install
---> 编译成mac：
+【编译成mac：】
 set CGO_ENABLED=0
 set GOARCH=amd64
 set GOOS=darwin
