@@ -7,6 +7,7 @@ import (
 	"go-iris/web/models"
 	"go-iris/web/services"
 	"go-iris/web/supports"
+	"go-iris/web/supports/vo"
 	"net/http"
 	"strconv"
 
@@ -21,14 +22,18 @@ func Registe(ctx iris.Context, u services.UserService) {
 	if err != nil {
 		ctx.Application().Logger().Errorf("用户[%s]注册失败。%s", user.Username, err.Error())
 		supports.Error(ctx, iris.StatusInternalServerError, supports.Registe_failur, nil)
-	}else {
+	} else {
 		supports.Ok_(ctx, supports.Registe_success)
 	}
 }
 
 func Login(ctx iris.Context, u services.UserService) {
 	user := new(models.User)
-	ctx.ReadJSON(&user)
+	if err := ctx.ReadJSON(&user); err != nil {
+		ctx.Application().Logger().Errorf("用户[%s]登录失败。%s", "", err.Error())
+		supports.Error(ctx, iris.StatusInternalServerError, supports.Login_failur, nil)
+		return
+	}
 
 	mUser := new(models.User)
 	mUser.Username = user.Username
@@ -58,7 +63,16 @@ func Login(ctx iris.Context, u services.UserService) {
 		return
 	}
 
-	supports.Ok(ctx, supports.Login_success, token)
+	supports.Ok(ctx, supports.Login_success, &vo.UserVO{
+		Username:   mUser.Username,
+		Appid:      mUser.Appid,
+		Name:       mUser.Name,
+		Phone:      mUser.Phone,
+		Email:      mUser.Email,
+		Userface:   mUser.Userface,
+		CreateTime: mUser.CreateTime,
+		Token:      token,
+	})
 	return
 }
 
@@ -92,7 +106,8 @@ func AddRole(ctx iris.Context) {
 func AddPermissions(ctx iris.Context) {
 	groupDef := new(supports.GroupDefine)
 	if err := ctx.ReadJSON(groupDef); err != nil {
-		supports.Error(ctx, http.StatusInternalServerError, supports.Option_failur, nil)
+		supports.Error(ctx, http.StatusInternalServerError, supports.Option_failur, err.Error())
+		return
 	}
 
 	var ok bool = true

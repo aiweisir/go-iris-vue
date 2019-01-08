@@ -82,8 +82,8 @@ func settings(engine *xorm.Engine, info *parse.DBConfigInfo) {
 	}
 
 	// 性能优化的时候才考虑，加上本机的SQL缓存
-	cacher := xorm.NewLRUCacher(xorm.NewMemoryStore(), 1000)
-	engine.SetDefaultCacher(cacher)
+	//cacher := xorm.NewLRUCacher(xorm.NewMemoryStore(), 1000)
+	//engine.SetDefaultCacher(cacher)
 }
 
 // 获取数据库连接的url

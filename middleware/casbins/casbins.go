@@ -2,8 +2,8 @@ package casbins
 
 import (
 	"fmt"
-	"go-iris/web/db"
 	"go-iris/inits/parse"
+	"go-iris/web/db"
 	"net/http"
 	"strconv"
 	"sync"
@@ -26,22 +26,7 @@ var (
 	adtLock sync.Mutex
 	eLock   sync.Mutex
 
-	rbacModel string = fmt.Sprintf(`
-[request_definition]
-r = sub, obj, act, suf
-
-[policy_definition]
-p = sub, obj, act, suf
-
-[role_definition]
-g = _, _
-
-[policy_effect]
-e = some(where (p.eft == allow))
-
-[matchers]
-m = g(r.sub, p.sub) && keyMatch(r.obj, p.obj) && regexMatch(r.suf, p.suf) && regexMatch(r.act, p.act) || r.sub == "%s"
-`, "")
+	rbacModel string
 )
 
 // Casbin is the casbins services which contains the casbins enforcer.
@@ -56,6 +41,25 @@ m = g(r.sub, p.sub) && keyMatch(r.obj, p.obj) && regexMatch(r.suf, p.suf) && reg
 //func New() *Casbin {
 //	return &Casbin{Enforcer: e}
 //}
+
+func SetRbacModel(rootID string) {
+	rbacModel = fmt.Sprintf(`
+[request_definition]
+r = sub, obj, act, suf
+
+[policy_definition]
+p = sub, obj, act, suf
+
+[role_definition]
+g = _, _
+
+[policy_effect]
+e = some(where (p.eft == allow))
+
+[matchers]
+m = g(r.sub, p.sub) && keyMatch(r.obj, p.obj) && regexMatch(r.suf, p.suf) && regexMatch(r.act, p.act) || r.sub == "%s"
+`, rootID)
+}
 
 // 获取Enforcer
 func GetEnforcer() *casbin.Enforcer {

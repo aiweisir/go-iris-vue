@@ -23,8 +23,6 @@ const (
 	username = "root"
 	password = "123456"
 )
-// 暴露给casbin
-var RootID string
 
 func initRootUser() {
 	e := db.MasterEngine()
@@ -36,6 +34,12 @@ func initRootUser() {
 	}
 	if exit {
 		golog.Info("@@@ Root User is existed.")
+
+		// 初始化rbac_model
+		r := models.User{Username: username}
+		if exit, _ := e.Get(&r); exit {
+			casbins.SetRbacModel(strconv.FormatInt(r.Id, 10))
+		}
 		return
 	}
 
@@ -46,10 +50,11 @@ func initRootUser() {
 		CreateTime: time.Now(),
 	}
 	effRow, err := e.Insert(&newRoot)
+	golog.Errorf("----> %s, %v, %d", newRoot.Id, newRoot, effRow)
 	if err != nil {
 		golog.Fatalf("@@@ When create Root User happened error. %s", err.Error())
 	}
-	RootID = strconv.FormatInt(newRoot.Id, 10)
+	casbins.SetRbacModel(strconv.FormatInt(newRoot.Id, 10))
 
 	// add policy for root
 	p := casbins.GetEnforcer().AddPolicy(utils.FmtRolePrefix(newRoot.Id), "/*", "ANY", ".*")

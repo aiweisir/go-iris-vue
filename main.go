@@ -23,7 +23,7 @@ func main() {
 	app.StaticWeb("/static", "resources/static") // 设置静态资源
 
 	golog.Info()
-	app.Run(iris.Addr(":8080"), iris.WithConfiguration(parse.C))
+	app.Run(iris.Addr(":8088"), iris.WithConfiguration(parse.C))
 }
 
 func newApp() *iris.Application {
@@ -60,7 +60,7 @@ func newApp() *iris.Application {
 	demo := app.Party("/demo")
 	{
 		demo.Get("/{pid:long}", dispatch.Handler(routes.GetOneProduct))
-		demo.Put("", dispatch.Handler(routes.AddOneProduct))
+		demo.Put("/", dispatch.Handler(routes.AddOneProduct))
 	}
 
 	a := app.Party("/a")

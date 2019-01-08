@@ -3,7 +3,7 @@ package supports
 // 前端请求的结构体
 type (
 	RoleDefine struct {
-		// 角色的标识等于casbin的sub，但有些需要加role_前缀
+		// 角色的标识等于casbin的sub，但角色需要加role_前缀
 		Sub string `json:"sub"`
 		// 对应casbin model的定义
 		Obj string `json:"obj"`
