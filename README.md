@@ -27,7 +27,7 @@ go+iris（web框架）+casbin（权限）+jwt+vue（渐进式js）的web server�
 5. HTTP Header <key:value> 设置：
     * key   -> Authorization
     * value -> bearer xxx
-6. 如果不使用前端，即使用server根目录下的`/resources/*`目录的前端打包文件；
+6. 如果不使用前端，可以使用server根目录下已经打包好的`/resources/*`前端文件；
 7. 如果要使用前端：
     * clone或下载`front-vue`分支代码
     * 推荐安装`vue >= 2.x`和`node.js >= v8.9.3(LTS)`环境。IDE推荐安装webstone
