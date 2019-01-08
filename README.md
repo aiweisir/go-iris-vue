@@ -21,7 +21,7 @@ Iris的教程较少、零散、基础，且框架集合的完整实战案例极�
 
 ### 使用教程
 1. 每次修改`/conf/app.yml`或`/conf/db.yml`的配置后，都需要在项目下执行命令打包配置数据：`go-bindata -pkg parse -o inits/parse/conf-data.go conf/`会生成`/inits/parse/conf-data.go`数据文件（执行成功后不会有任何提示）；
-2. ***部署时如有上述配置文件修改也需要再执行一遍上述命令，如此才能使配置修改生效***；
+2. **部署时如有上述配置文件修改也需要再执行一遍上述命令，如此才能使配置修改生效**；
 3. `go-bindata`的安装和使用教程在项目下的`/doc/go-bindata-usage`文件中说明；
 4. 除了首页、登录、注册接口其他都需要在Header中设置token信息；
 5. HTTP Header <key:value> 设置：
@@ -54,7 +54,7 @@ go install
 编译后的可执行文件在你本地go环境的GOPATH/bin/下找到。
 ```
 
-2. **启动项目：**将打包后的文件 和 `/resources/*`目录文件 放在同一级目录中，执行go打包后的可执行文件，启动。如下图：
+2. **启动项目**：将打包后的文件 和 `/resources/*`目录文件 放在同一级目录中，执行go打包后的可执行文件，启动。如下图：
 ![部署时包的结构](https://images.gitee.com/uploads/images/2019/0108/214456_90a778b1_1537471.png "屏幕截图.png")
 
 ### 安装环境
