@@ -47,17 +47,25 @@ go+iris（web框架）+casbin（权限）+jwt+vue（渐进式js）的web server�
     * `npm install`安装本地前端环境
     * `npm run dev`启动本地前端环境
     * `npm run build`打包前端文件
-    * 可以将打包的dist目录下的文件拷贝到server目录的`/resources目录下`
+    * 可以将打包的dist目录下的文件拷贝到server目录的`/resources/`目录下
 
 > #### 部署（不使用nginx情况下），步骤如下：
 >> server端项目编译。这儿以windows 64bit环境下打包为例，在项目下**使用命令行**执行下面的命令：
 >>    >编译成linux 64bit：
-  ```set CGO_ENABLED=0<br/>
-     set GOARCH=amd64
-     set GOOS=linux
-     go install
 ```
->> **启动项目：**将打包后的文件 和 `/resources/*目录文件` 放在同一级目录中，执行go打包后的可执行文件。
+set CGO_ENABLED=0<br/>
+set GOARCH=amd64
+set GOOS=linux
+go install
+```
+>>    >编译成mac：
+```
+set CGO_ENABLED=0<br/>
+set GOARCH=amd64
+set GOOS=darwin
+go install
+```
+>> **启动项目：**将打包后的文件 和 `/resources/*`目录文件 放在同一级目录中，执行go打包后的可执行文件。
 
 
 
