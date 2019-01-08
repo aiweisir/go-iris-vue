@@ -20,8 +20,8 @@ Iris的教程比较少，比较零散基础，且框架集合的完整实战案�
 >    * 前端项目持续续更新中...，目前在front-vue分支
 
 ### 使用教程
-1. 每次修改`/conf/app.yml`或`/conf/db.yml`的配置数据后，都需要在项目下执行命令：`go-bindata -pkg parse -o inits/parse/conf-data.go conf/`会生成`/inits/parse/conf-data.go`数据文件（执行成功后没任何提示）；
-2. 部署时如有变动也需要再执行一遍上述命令，如此才能使配置修改生效；
+1. 每次修改`/conf/app.yml`或`/conf/db.yml`的配置后，都需要在项目下执行命令打包配置数据：`go-bindata -pkg parse -o inits/parse/conf-data.go conf/`会生成`/inits/parse/conf-data.go`数据文件（执行成功后没任何提示）；
+2. ***部署时如有变动也需要再执行一遍上述命令，如此才能使配置修改生效****；
 3. `go-bindata`的安装和使用教程在项目下的`/doc/go-bindata-usage`文件中说明；
 4. 除了首页、登录、注册接口其他都需要在Header中设置token信息；
 5. HTTP Header <key:value> 设置：
