@@ -84,7 +84,7 @@ go install
 2. **启动项目**。将server端打包后的可执行文件 和 `/resources/*`前端目录文件 放在同一级目录中，执行go打包后的可执行文件，启动。如下图：
 ![部署时包的结构](https://images.gitee.com/uploads/images/2019/0108/214456_90a778b1_1537471.png "屏幕截图.png")
 
-> 启动的本地服务地址：localhost:8088
+> 启动的本地服务地址：localhost:8088<br/>
 > 登录：
 >    > 初始账号：root<br />
 >    > 初始密码: 123456
