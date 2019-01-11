@@ -17,7 +17,7 @@ Iris的教程较少、零散、基础，且框架集合的完整实战案例极�
 
 > #### 软件架构
 > 目前支持单web架构，如果部署成前后端分离，可用nginx中间件代理。
->    * 采用了Casbin做restful的rbac权限控制；
+>    * 采用了Casbin做Restful的rbac权限控制；
 >    * 采用jwt做回话控制；
 >    * 采用Mysql+xorm做持久层；
 >    * Vue前端项目持续更新中...，目前在front-vue分支；
