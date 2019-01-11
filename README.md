@@ -19,24 +19,27 @@ Iris的教程较少、零散、基础，且框架集合的完整实战案例极�
 > 目前支持单web架构，如果部署成前后端分离，可用nginx中间件代理。
 >    * 前端项目持续续更新中...，目前在front-vue分支
 ***
-> 项目目录结构
->> conf 所有的配置文件
->> doc 说明文档（含go-bindata和mysql文件）
->> inits 所有的初始化项
->>    > parse 配置文件的初始化项
->>    > init.go 用于初始化系统root用户，并且注入所有service
->> middleware 包含的中间件目录
->>    > casbins 用于rbac权限的中间件
->>    > jwts 用于jwt中间件
->> resources 打包的前端静态资源文件
->> utils 工具包
->> web 
->>    > db 数据库dao层
->>    > models 模型文件目录
->>    > routes 所有分发出来的路由的目录
->>    > services 所有的service
->>    > supports 放辅助方法的目录
-
+### 项目目录结构
+```
+go-iris
+  +-- conf 所有的配置文件
+  +-- doc 说明文档（含go-bindata和mysql文件）
+  +-- inits 所有的初始化项目录
+  |       +-- parse 配置文件的初始化项目录
+  |       +-- init.go 用于初始化系统root用户，并注入所有service
+  +-- middleware 包含的中间件目录
+  |       +-- casbins 用于rbac权限的中间件的目录
+  |       +-- jwts jwt中间件目录
+  +-- resources 打包的前端静态资源文件
+  +-- utils 工具包目录
+  +-- web
+  |       +-- db 数据库dao层目录
+  |       +-- models 模型文件目录
+  |       +-- routes 所有分发出来的路由的目录
+  |       +-- services 所有的service
+  |       +-- supports 提供辅助方法的目录
+  +-- main.go 入口
+```
 ### 使用教程
 1. 每次修改`/conf/app.yml`或`/conf/db.yml`的配置后，都需要在项目下执行命令打包配置数据：`go-bindata -pkg parse -o inits/parse/conf-data.go conf/`会生成`/inits/parse/conf-data.go`数据文件（执行成功后不会有任何提示，则反之）；
 2. **部署时如有上述配置文件修改也需要再执行一遍上述命令，如此才能使配置修改生效**；
