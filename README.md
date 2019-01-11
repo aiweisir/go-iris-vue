@@ -49,12 +49,11 @@ go-iris
 1. 每次修改`/conf/app.yml`或`/conf/db.yml`的配置后，都需要在项目下执行命令打包配置数据：`go-bindata -pkg parse -o inits/parse/conf-data.go conf/`会生成`/inits/parse/conf-data.go`数据文件（执行成功后不会有任何提示，则反之）；
 2. **部署时如有上述配置文件修改也需要再执行一遍上述命令，如此才能使配置修改生效**；
 3. `go-bindata`的安装和使用教程在项目下的`/doc/go-bindata-usage`文件中说明；
-4. 除了首页、登录、注册接口其他都需要在Header中设置token信息；
-5. HTTP Header <key:value> 设置：
+4. 除了首页、登录、注册接口其他都需要在Header中设置token信息。<key:value> 设置：
     * key   -> Authorization
     * value -> bearer xxx
-6. 如果不使用前端，可以使用server端根目录下已经打包好的`/resources/*`前端文件；
-7. 如果要使用前端：
+5. 如果不使用前端，可以使用server端根目录下已经打包好的`/resources/*`前端文件；
+6. 如果要使用前端：
     * clone或下载`front-vue`分支代码
     * 推荐安装`vue >= 2.x`和`node.js >= v8.9.3(LTS)`环境。IDE推荐安装webstone
     * `npm install`安装本地前端环境
