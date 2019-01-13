@@ -1,6 +1,10 @@
 package models
 
-import "time"
+import (
+	"go-iris/web/db"
+	"time"
+
+)
 
 type User struct {
 	Id         int64  `xorm:"pk autoincr INT(10) notnull" json:"id" form:"id"`
@@ -13,4 +17,14 @@ type User struct {
 	Userface   string `xorm:"notnull" json:"userface" form:"userface"`
 	CreateTime time.Time `json:"createTime" form:"createTime"`
 	UpdateTime time.Time `json:"updateTime" form:"updateTime"`
+}
+
+func InsertUser(user ...*User) (int64, error) {
+	e := db.MasterEngine()
+	return e.Insert(user)
+}
+
+func QueryUserByUsername(user *User) (bool, error) {
+	e := db.MasterEngine()
+	return e.Get(user)
 }

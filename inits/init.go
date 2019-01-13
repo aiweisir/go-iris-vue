@@ -4,10 +4,7 @@ import (
 	"go-iris/middleware/casbins"
 	"go-iris/utils"
 	"go-iris/web/db"
-	"go-iris/web/db/mappers"
 	"go-iris/web/models"
-	"go-iris/web/routes/dispatch"
-	"go-iris/web/services"
 	"strconv"
 	"time"
 
@@ -16,7 +13,7 @@ import (
 
 func init() {
 	initRootUser()
-	initServices()
+	//initServices()
 }
 
 const (
@@ -68,8 +65,8 @@ func initRootUser() {
 func initServices() {
 	golog.Info("@@@ Inject all service")
 
-	dispatch.Register(
-		services.NewUserService(mappers.NewUserMapper()),
-		services.NewDemoService(mappers.NewDemoMapper()),
-	)
+	//dispatch.Register(
+	//	services.NewUserService(mappers.NewUserMapper()),
+	//	services.NewDemoService(mappers.NewDemoMapper()),
+	//)
 }

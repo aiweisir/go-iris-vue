@@ -89,6 +89,7 @@ func GetEnforcer() *casbin.Enforcer {
 	//e = casbin.NewEnforcer("conf/rbac_model.conf", singletonAdapter())
 	e = casbin.NewEnforcer(m, singletonAdapter())
 	e.EnableLog(true)
+	e.GetGroupingPolicy()
 	return e
 }
 

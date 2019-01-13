@@ -5,21 +5,25 @@ import (
 	"go-iris/middleware/jwts"
 	"go-iris/utils"
 	"go-iris/web/models"
-	"go-iris/web/services"
 	"go-iris/web/supports"
 	"go-iris/web/supports/vo"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/kataras/iris"
 )
 
-func Registe(ctx iris.Context, u services.UserService) {
+func Registe(ctx iris.Context) {
 	user := new(models.User)
 	ctx.ReadJSON(&user)
 
-	err := u.DoRegiste(user)
-	if err != nil {
+	user.CreateTime = time.Now()
+	user.Password = utils.AESEncrypt([]byte(user.Password))
+
+	effect, err := models.InsertUser(user)
+	//err := u.DoRegiste(user)
+	if effect <= 0 || err != nil {
 		ctx.Application().Logger().Errorf("用户[%s]注册失败。%s", user.Username, err.Error())
 		supports.Error(ctx, iris.StatusInternalServerError, supports.Registe_failur, nil)
 	} else {
@@ -27,7 +31,7 @@ func Registe(ctx iris.Context, u services.UserService) {
 	}
 }
 
-func Login(ctx iris.Context, u services.UserService) {
+func Login(ctx iris.Context) {
 	user := new(models.User)
 	if err := ctx.ReadJSON(&user); err != nil {
 		ctx.Application().Logger().Errorf("用户[%s]登录失败。%s", "", err.Error())
@@ -37,7 +41,8 @@ func Login(ctx iris.Context, u services.UserService) {
 
 	mUser := new(models.User)
 	mUser.Username = user.Username
-	has, err := u.DoLogin(mUser)
+	has, err := models.QueryUserByUsername(mUser)
+	//has, err := u.DoLogin(mUser)
 	//golog.Error(mUser)
 	if err != nil {
 		ctx.Application().Logger().Errorf("用户[%s]登录失败。%s", user.Username, err.Error())
