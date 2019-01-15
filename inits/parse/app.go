@@ -28,7 +28,7 @@ type (
 	}
 )
 
-func init() {
+func AppOtherParse() {
 	golog.Info("@@@ Init app conf")
 	//c := iris.YAML("conf/app.yml")
 

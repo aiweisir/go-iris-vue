@@ -1,14 +1,11 @@
 package routes
 
 import (
-	"go-iris/middleware/casbins"
 	"go-iris/middleware/jwts"
 	"go-iris/utils"
 	"go-iris/web/models"
 	"go-iris/web/supports"
 	"go-iris/web/supports/vo"
-	"net/http"
-	"strconv"
 	"time"
 
 	"github.com/kataras/iris"
@@ -21,7 +18,7 @@ func Registe(ctx iris.Context) {
 	user.CreateTime = time.Now()
 	user.Password = utils.AESEncrypt([]byte(user.Password))
 
-	effect, err := models.InsertUser(user)
+	effect, err := models.CreateUser(user)
 	//err := u.DoRegiste(user)
 	if effect <= 0 || err != nil {
 		ctx.Application().Logger().Errorf("用户[%s]注册失败。%s", user.Username, err.Error())
@@ -41,7 +38,7 @@ func Login(ctx iris.Context) {
 
 	mUser := new(models.User)
 	mUser.Username = user.Username
-	has, err := models.QueryUserByUsername(mUser)
+	has, err := models.GetUserByUsername(mUser)
 	//has, err := u.DoLogin(mUser)
 	//golog.Error(mUser)
 	if err != nil {
@@ -81,50 +78,6 @@ func Login(ctx iris.Context) {
 	return
 }
 
-// 添加角色
-func AddRole(ctx iris.Context) {
-	roleDef := new(supports.RoleDefine)
-	if err := ctx.ReadJSON(roleDef); err != nil {
-		supports.Error(ctx, http.StatusInternalServerError, supports.Option_failur, nil)
-	}
-	if roleDef.Obj == "" {
-		roleDef.Obj = "/demo/*"
-	}
-	if roleDef.Act == "" {
-		roleDef.Act = "*"
-	}
-	if roleDef.Suf == "" {
-		roleDef.Act = ".*"
-	}
-
-	e := casbins.GetEnforcer()
-	ok := e.AddPolicy(utils.FmtRolePrefix(roleDef.Sub), roleDef.Obj, roleDef.Act, roleDef.Suf)
-	if !ok {
-		supports.Error(ctx, http.StatusInternalServerError, supports.Option_failur, nil)
-	}
-	supports.Ok_(ctx, supports.Option_success)
-}
-
 // 修改角色的权限
 
-// 给用户指定角色
-func AddPermissions(ctx iris.Context) {
-	groupDef := new(supports.GroupDefine)
-	if err := ctx.ReadJSON(groupDef); err != nil {
-		supports.Error(ctx, http.StatusInternalServerError, supports.Option_failur, err.Error())
-		return
-	}
 
-	var ok bool = true
-	e := casbins.GetEnforcer()
-	for _, v := range groupDef.Sub {
-		if !e.AddGroupingPolicy(strconv.FormatInt(groupDef.Uid, 10), v) {
-			ok = false
-		}
-	}
-
-	if !ok {
-		supports.Error(ctx, http.StatusInternalServerError, supports.Option_failur, nil)
-	}
-	supports.Ok_(ctx, supports.Option_success)
-}

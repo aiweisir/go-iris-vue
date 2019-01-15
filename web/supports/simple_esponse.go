@@ -26,6 +26,9 @@ const (
 	Not_found           string = "您请求的url不存在"
 	Permissions_less    string = "权限不足"
 
+	Role_create_failur string = "创建角色失败"
+	Role_create_sucess string = "创建角色成功"
+
 	// value define
 
 )

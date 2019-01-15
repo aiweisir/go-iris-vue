@@ -31,47 +31,46 @@ func newApp() *iris.Application {
 	registerMiddlewareAndDefError(app)
 
 	app.PartyFunc("/", func(home iris.Party) {
-		home.Get("/", func(ctx iris.Context) {
-			ctx.View("index.html")
-		})
+		// 首页模块
+		home.Party("/")
+		{
+			home.Get("/", func(ctx iris.Context) {
+				ctx.View("index.html")
+			})
+			home.Get("/sysMenu", dispatch.Handler(routes.DynamicMenu)) // 获取动态菜单
+		}
+
+		// 用户API模块
 		user := home.Party("/user")
 		{
 			//p.Use(middleware.BasicAuth)
 			user.Post("/registe", dispatch.Handler(routes.Registe))
 			user.Post("/login", dispatch.Handler(routes.Login))
+		}
 
-			// permission manage api
-			manage := user.Party("/manage")
+		// 权限API模块
+		admin := home.Party("/admin")
+		{
+			role := admin.Party("/role")
 			{
-				manage.Post("/role", dispatch.Handler(routes.AddRole))
-				//manage.Delete("/role", dispatch.Handler(nil))
-				manage.Post("/permissions", dispatch.Handler(routes.AddPermissions))
-				//manage.Delete("/permissions", dispatch.Handler(nil))
+				role.Post("/", dispatch.Handler(routes.CreateRole)) // 添加角色
+				role.Get("/", dispatch.Handler(routes.AllRoleOfUser)) // 获取所有角色
+				role.Delete("/", dispatch.Handler(routes.DeleteRole)) // 删除角色
+			}
+
+			permissions := admin.Party("/permissions")
+			{
+				permissions.Post("/permissions", dispatch.Handler(routes.RelationUserRole)) // 给角色添加权限
 			}
 		}
-		user.Post("/s", func(ctx iris.Context) {
-			ctx.JSON(iris.Map{
-				"a": 1,
-				"b": 2,
-			})
-		})
+
+		// demo测试API模块
+		demo := home.Party("/demo")
+		{
+			demo.Get("/{pid:long}", dispatch.Handler(routes.GetOneProduct))
+			demo.Put("/", dispatch.Handler(routes.AddOneProduct))
+		}
 	})
-
-	demo := app.Party("/demo")
-	{
-		demo.Get("/{pid:long}", dispatch.Handler(routes.GetOneProduct))
-		demo.Put("/", dispatch.Handler(routes.AddOneProduct))
-	}
-
-	a := app.Party("/a")
-	{
-		a.Get("/a1", func(ctx iris.Context) {
-			ctx.JSON("/a/a1, get")
-		})
-		a.Post("/a2", func(ctx iris.Context) {
-			ctx.JSON("/a/a2, post")
-		})
-	}
 
 	return app
 }

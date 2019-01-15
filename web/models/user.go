@@ -6,6 +6,7 @@ import (
 
 )
 
+// mysql user table
 type User struct {
 	Id         int64  `xorm:"pk autoincr INT(10) notnull" json:"id" form:"id"`
 	Username   string `xorm:"notnull" json:"username" form:"username"`
@@ -19,12 +20,12 @@ type User struct {
 	UpdateTime time.Time `json:"updateTime" form:"updateTime"`
 }
 
-func InsertUser(user ...*User) (int64, error) {
+func CreateUser(user ...*User) (int64, error) {
 	e := db.MasterEngine()
 	return e.Insert(user)
 }
 
-func QueryUserByUsername(user *User) (bool, error) {
+func GetUserByUsername(user *User) (bool, error) {
 	e := db.MasterEngine()
 	return e.Get(user)
 }

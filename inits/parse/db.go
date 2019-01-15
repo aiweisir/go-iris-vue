@@ -10,12 +10,8 @@ var (
 	DBConfig DB
 )
 
-func init() {
+func DBSettingParse() {
 	golog.Info("@@@ Init db conf")
-	ParseDBSetting()
-}
-
-func ParseDBSetting() {
 	//data, err := ioutil.ReadFile("conf/db.yml")
 	////golog.Infof("%s", data)
 	//if err != nil {
