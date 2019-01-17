@@ -69,3 +69,5 @@ func addAllpolicy(rooId string) {
 		e.AddGroupingPolicy(rooId, v[0])
 	}
 }
+
+

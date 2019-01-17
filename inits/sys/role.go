@@ -9,13 +9,13 @@ import (
 var (
 	// 定义系统初始的角色
 	Components = [][]string{
-		{"admin", "/admin*", "GET|POST|DELETE|PUT", ".*", "", "", "", "角色管理"},
-		{"demo", "/demo*", "GET|POST|DELETE|PUT", ".*", "", "", "", "demo角色"},
+		{"admin", "/admin*", "GET|POST|DELETE|PUT", ".*", "角色管理"},
+		{"demo", "/demo*", "GET|POST|DELETE|PUT", ".*", "demo角色"},
 	}
 )
 
 // 创建系统默认角色
-func CreateSystemRole() {
+func CreateSystemRole() bool {
 	e := casbins.GetEnforcer()
 
 	for _, v := range Components {
@@ -26,4 +26,5 @@ func CreateSystemRole() {
 			}
 		}
 	}
+	return true
 }

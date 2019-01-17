@@ -3,6 +3,7 @@ package casbins
 import (
 	"fmt"
 	"go-iris/inits/parse"
+	"go-iris/middleware/jwts"
 	"go-iris/web/db"
 	"go-iris/web/supports"
 	"net/http"
@@ -11,16 +12,13 @@ import (
 
 	"github.com/casbin/casbin"
 
-	//"github.com/casbin/xorm-adapter"
-	"github.com/dgrijalva/jwt-go"
+	"github.com/casbin/xorm-adapter"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/kataras/golog"
-	"github.com/kataras/iris"
 	"github.com/kataras/iris/context"
 )
 
 var (
-	adt *Adapter // Your driver and data source.
+	adt *xormadapter.Adapter // Your driver and data source.
 	e   *casbin.Enforcer
 
 	adtLook sync.Mutex
@@ -92,7 +90,7 @@ func GetEnforcer() *casbin.Enforcer {
 	return e
 }
 
-func singleAdapter() *Adapter {
+func singleAdapter() *xormadapter.Adapter {
 	if adt != nil {
 		return adt
 	}
@@ -108,7 +106,7 @@ func singleAdapter() *Adapter {
 	// The adapter will use the MySQL database named "casbins".
 	// If it doesn't exist, the adapter will create it automatically.
 	// a := xormadapter.NewAdapter("mysql", "root:root@tcp(127.0.0.1:3306)/?charset=utf8&parseTime=True&loc=Local") // Your driver and data source.
-	adt = NewAdapter(master.Dialect, url, true) // Your driver and data source.
+	adt = xormadapter.NewAdapter(master.Dialect, url, true) // Your driver and data source.
 	return adt
 }
 
@@ -117,25 +115,20 @@ func singleAdapter() *Adapter {
 // [...]
 // app.Get("/dataset1/resource1", casbinMiddleware.ServeHTTP, myHandler)
 // [...]
-func CheckPermissions(ctx context.Context, token *jwt.Token) bool {
-	mapClaims := (token.Claims).(jwt.MapClaims)
-	id, ok := mapClaims["id"].(float64)
-	golog.Infof("*** MapClaims=%v, id=%f, isOK=%t", mapClaims, id, ok)
+func CheckPermissions(ctx context.Context) bool {
+	user, ok := jwts.ParseToken(ctx)
 	if !ok {
-		supports.Error(ctx, iris.StatusInternalServerError, supports.Token_parse_failur, nil)
 		return false
 	}
 
-	uid := strconv.Itoa(int(id))
+	uid := strconv.Itoa(int(user.Id))
 	yes := GetEnforcer().Enforce(uid, ctx.Path(), ctx.Method(), ".*")
-	//golog.Infof("*** uid=%d, Path=%s, Method=%s, Permission=%t", int(id), ctx.Path(), ctx.Method(), yes)
 	if !yes {
-		supports.Unauthorized(ctx, supports.Permissions_less, nil)
+		supports.Unauthorized(ctx, supports.PermissionsLess, nil)
 		ctx.StopExecution()
 		return false
 	}
 
-	ctx.Values().Set("uid", uid)
 	return true
 	//ctx.Next()
 }

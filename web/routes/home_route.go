@@ -1,19 +1,21 @@
 package routes
 
 import (
-	"go-iris/middleware/casbins"
+	"go-iris/middleware/jwts"
+	"go-iris/web/models"
 	"go-iris/web/supports"
 
-	"github.com/kataras/golog"
 	"github.com/kataras/iris"
 )
 
 func DynamicMenu(ctx iris.Context)  {
-	uid := ctx.Values().Get("uid").(string)
+	user, ok := jwts.ParseToken(ctx)
+	if !ok {
+		return
+	}
 
-	golog.Info("===>", uid)
-	res := casbins.GetAllResourcesByUID(uid)
-	supports.Ok(ctx, supports.Option_success, res)
+	menuTree := models.DynamicMenuTree(user.Id)
+	supports.Ok(ctx, supports.OptionSuccess, menuTree)
 }
 
 

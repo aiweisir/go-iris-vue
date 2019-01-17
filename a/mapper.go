@@ -1,4 +1,4 @@
-package models
+package a
 
 import (
 	"fmt"
@@ -9,7 +9,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func main()  {
+func Enforce() *casbin.Enforcer {
 	// Initialize a Xorm adapter and use it in a Casbin enforcer:
 	// The adapter will use the MySQL database named "casbins".
 	// If it doesn't exist, the adapter will create it automatically.
@@ -19,9 +19,12 @@ func main()  {
 	// The adapter will use the table named "casbin_rule".
 	// If it doesn't exist, the adapter will create it automatically.
 	// a := xormadapter.NewAdapter("mysql", "mysql_username:mysql_password@tcp(127.0.0.1:3306)/abc", true)
-
 	e := casbin.NewEnforcer("conf/rbac_model.conf", adt)
+	return e
+}
 
+func a1()  {
+	e := Enforce()
 	// Load the policy from DB.
 	e.LoadPolicy()
 
@@ -34,7 +37,7 @@ func main()  {
 	fmt.Println(reflect.TypeOf(e.GetPolicy()))
 
 	// Modify the policy.
-	 e.AddPolicy("alice", "data1", "read")
+	e.AddPolicy("alice", "data1", "read")
 	// e.RemovePolicy(...)
 
 	e.Enforce()
@@ -42,4 +45,13 @@ func main()  {
 
 	// Save the policy back to DB.
 	e.SavePolicy()
+}
+
+func a2()  {
+	//e := Enforce()
+
+}
+
+func main()  {
+	a2()
 }

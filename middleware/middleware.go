@@ -21,19 +21,17 @@ func ServeHTTP(ctx context.Context) {
 	}
 
 	// jwt token拦截
-	token := jwts.Serve(ctx)
-	if token == nil {
-		//supports.Unauthorized(ctx, supports.Token_failur, nil)
-		//ctx.StopExecution()
+	if !jwts.Serve(ctx) {
 		return
 	}
 
-	// casbin权限拦截
-	ok := casbins.CheckPermissions(ctx, token)
-	if !ok {
-		//supports.Unauthorized(ctx, supports.Permissions_less, nil)
-		//ctx.StopExecution()
-		return
+	// 系统菜单不进行权限拦截
+	if !strings.Contains(path, "/sysMenu") {
+		// casbin权限拦截
+		ok := casbins.CheckPermissions(ctx)
+		if !ok {
+			return
+		}
 	}
 
 	// Pass to real API

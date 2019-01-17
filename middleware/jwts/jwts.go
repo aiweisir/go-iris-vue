@@ -1,9 +1,8 @@
 package jwts
 
 import (
-	"go-iris/web/supports"
-	"errors"
 	"fmt"
+	"go-iris/web/supports"
 	"log"
 	"strings"
 
@@ -16,9 +15,10 @@ import (
 
 	"go-iris/web/models"
 
+	"sync"
+
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/context"
-	"sync"
 )
 
 // iris provides some basic middleware, most for your learning courve.
@@ -58,17 +58,37 @@ var (
 )
 
 // Serve the middleware's action
-func Serve(ctx context.Context) (token *jwt.Token) {
+func Serve(ctx context.Context) bool {
 	ConfigJWT()
 	if err := jwts.CheckJWT(ctx); err != nil {
 		//supports.Unauthorized(ctx, supports.Token_failur, nil)
 		//ctx.StopExecution()
 		golog.Errorf("Check jwt error, %s", err)
-		return nil
+		return false
 	}
-	return jwts.Get(ctx)
+	return true
 	// If everything ok then call next.
 	//ctx.Next()
+}
+
+// 解析token的信息为当前用户
+func ParseToken(ctx context.Context) (*models.User, bool) {
+	mapClaims := (jwts.Get(ctx).Claims).(jwt.MapClaims)
+
+	id, ok1 := mapClaims["id"].(float64)
+	username, ok2 := mapClaims["username"].(string)
+
+	golog.Infof("*** MapClaims=%v, [id=%f, ok1=%t]; [username=%s, ok2=%t]", mapClaims, id, ok1, username, ok2)
+	if !ok1 || !ok2 {
+		supports.Error(ctx, iris.StatusInternalServerError, supports.TokenParseFailur, nil)
+		return nil, false
+	}
+
+	user := models.User{
+		Id:       int64(id),
+		Username: username,
+	}
+	return &user, true
 }
 
 // below 3 method is get token from url
@@ -137,17 +157,10 @@ func (m *Jwts) CheckJWT(ctx context.Context) error {
 
 	// Use the specified token extractor to extract a token from the request
 	token, err := m.Config.Extractor(ctx)
-
-	// If debugging is turned on, log the outcome
-	if err != nil {
-		m.logf("Error extracting JWT: %v", err)
-	} else {
-		//m.logf("Token extracted: %s", token)
-	}
-
 	// If an error occurs, call the error handler and return an error
 	if err != nil {
-		m.Config.ErrorHandler(ctx, err.Error())
+		m.logf("Error extracting JWT: %v", err)
+		m.Config.ErrorHandler(ctx, supports.TokenExactFailur)
 		return fmt.Errorf("Error extracting token: %v", err)
 	}
 
@@ -160,11 +173,10 @@ func (m *Jwts) CheckJWT(ctx context.Context) error {
 			return nil
 		}
 
-		// If we get here, the required token is missing
-		errorMsg := "Required authorization token not found"
-		m.Config.ErrorHandler(ctx, errorMsg)
 		m.logf("  Error: No credentials found (CredentialsOptional=false)")
-		return fmt.Errorf(errorMsg)
+		// If we get here, the required token is missing
+		m.Config.ErrorHandler(ctx, supports.TokenParseFailurAndEmpty)
+		return fmt.Errorf(supports.TokenParseFailurAndEmpty)
 	}
 
 	// Now parse the token
@@ -173,7 +185,7 @@ func (m *Jwts) CheckJWT(ctx context.Context) error {
 	// Check if there was an error in parsing...
 	if err != nil {
 		m.logf("Error parsing token: %v", err)
-		m.Config.ErrorHandler(ctx, err.Error())
+		m.Config.ErrorHandler(ctx, supports.TokenParseFailur)
 		return fmt.Errorf("Error parsing token: %v", err)
 	}
 
@@ -182,21 +194,21 @@ func (m *Jwts) CheckJWT(ctx context.Context) error {
 			m.Config.SigningMethod.Alg(),
 			parsedToken.Header["alg"])
 		m.logf("Error validating token algorithm: %s", message)
-		m.Config.ErrorHandler(ctx, errors.New(message).Error())
+		m.Config.ErrorHandler(ctx, supports.TokenParseFailur) // 算法错误
 		return fmt.Errorf("Error validating token algorithm: %s", message)
 	}
 
 	// Check if the parsed token is valid...
 	if !parsedToken.Valid {
-		m.logf("Token is invalid")
-		m.Config.ErrorHandler(ctx, "The token isn't valid")
-		return fmt.Errorf("Token is invalid")
+		m.logf(supports.TokenParseFailurAndInvalid)
+		m.Config.ErrorHandler(ctx, supports.TokenParseFailurAndInvalid)
+		return fmt.Errorf(supports.TokenParseFailurAndInvalid)
 	}
 
 	if m.Config.Expiration {
 		if claims, ok := parsedToken.Claims.(jwt.MapClaims); ok {
 			if expired := claims.VerifyExpiresAt(time.Now().Unix(), true); !expired {
-				return fmt.Errorf("Token is expired")
+				return fmt.Errorf(supports.TokenExpire)
 			}
 		}
 	}
@@ -243,8 +255,8 @@ func ConfigJWT() {
 		//加密的方式
 		SigningMethod: jwt.SigningMethodHS256,
 		//验证未通过错误处理方式
-		ErrorHandler: func(ctx context.Context, err string) {
-			supports.Error(ctx, iris.StatusUnauthorized, supports.Token_failur, nil)
+		ErrorHandler: func(ctx context.Context, errMsg string) {
+			supports.Error(ctx, iris.StatusUnauthorized, errMsg, nil)
 		},
 		// 指定func用于提取请求中的token
 		Extractor: FromAuthHeader,
@@ -258,7 +270,7 @@ func ConfigJWT() {
 }
 
 type Claims struct {
-	Id       int64    `json:"id"`
+	Id       int64  `json:"id"`
 	Username string `json:"username"`
 	//Password string `json:"password"`
 	//User models.User `json:"user"`

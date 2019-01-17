@@ -9,6 +9,7 @@ type (
 		Obj string `json:"obj"`
 		Act string `json:"act"`
 		Suf string `json:"suf"`
+		RoleName string `json:"roleName"`
 	}
 
 	// 用户所属角色组

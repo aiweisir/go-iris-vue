@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50714
 File Encoding         : 65001
 
-Date: 2019-01-15 17:33:47
+Date: 2019-01-17 17:17:01
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -22,33 +22,30 @@ DROP TABLE IF EXISTS `casbin_rule`;
 CREATE TABLE `casbin_rule` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `p_type` varchar(100) DEFAULT NULL,
-  `sub` varchar(64) DEFAULT NULL,
-  `obj` varchar(64) DEFAULT NULL,
-  `act` varchar(64) DEFAULT NULL,
-  `suf` varchar(64) DEFAULT NULL,
-  `modular` varchar(64) DEFAULT NULL,
-  `component` varchar(64) DEFAULT NULL,
-  `icon` varchar(64) DEFAULT NULL,
-  `role_name` varchar(64) DEFAULT NULL,
-  `resources_name` varchar(64) DEFAULT NULL,
-  `enabled` tinyint(1) DEFAULT '1',
-  `create_time` datetime DEFAULT NULL,
+  `v0` varchar(100) DEFAULT NULL,
+  `v1` varchar(100) DEFAULT NULL,
+  `v2` varchar(100) DEFAULT NULL,
+  `v3` varchar(100) DEFAULT NULL,
+  `v4` varchar(100) DEFAULT NULL,
+  `v5` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `IDX_casbin_rule_p_type` (`p_type`),
-  KEY `IDX_casbin_rule_obj` (`obj`),
-  KEY `IDX_casbin_rule_act` (`act`),
-  KEY `IDX_casbin_rule_suf` (`suf`),
-  KEY `IDX_casbin_rule_sub` (`sub`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
+  KEY `IDX_casbin_rule_v0` (`v0`),
+  KEY `IDX_casbin_rule_v1` (`v1`),
+  KEY `IDX_casbin_rule_v2` (`v2`),
+  KEY `IDX_casbin_rule_v3` (`v3`),
+  KEY `IDX_casbin_rule_v4` (`v4`),
+  KEY `IDX_casbin_rule_v5` (`v5`),
+  KEY `IDX_casbin_rule_p_type` (`p_type`)
+) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of casbin_rule
 -- ----------------------------
-INSERT INTO `casbin_rule` VALUES ('28', 'p', '80', '/*', 'ANY', '.*', '', '', '', '', '', '0', null);
-INSERT INTO `casbin_rule` VALUES ('29', 'g', '80', 'admin', '', '', '', '', '', '', '', '0', null);
-INSERT INTO `casbin_rule` VALUES ('30', 'g', '80', 'demo', '', '', '', '', '', '', '', '0', null);
-INSERT INTO `casbin_rule` VALUES ('31', 'p', 'admin', '/admin*', 'GET|POST|DELETE|PUT', '.*', '', '', '', '角色管理', '', '0', null);
-INSERT INTO `casbin_rule` VALUES ('32', 'p', 'demo', '/demo*', 'GET|POST|DELETE|PUT', '.*', '', '', '', 'demo角色', '', '0', null);
+INSERT INTO `casbin_rule` VALUES ('65', 'p', '90', '/*', 'ANY', '.*', '', '');
+INSERT INTO `casbin_rule` VALUES ('66', 'g', '90', 'admin', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('67', 'g', '90', 'demo', '', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('68', 'p', 'admin', '/admin*', 'GET|POST|DELETE|PUT', '.*', '角色管理', '');
+INSERT INTO `casbin_rule` VALUES ('69', 'p', 'demo', '/demo*', 'GET|POST|DELETE|PUT', '.*', 'demo角色', '');
 
 -- ----------------------------
 -- Table structure for demo
@@ -91,7 +88,7 @@ CREATE TABLE `menu` (
   `create_time` timestamp NULL DEFAULT NULL,
   `update_time` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of menu
@@ -120,15 +117,15 @@ CREATE TABLE `role_menu` (
   KEY `r_m_id` (`rid`),
   CONSTRAINT `role_menu_ibfk_1` FOREIGN KEY (`mid`) REFERENCES `menu` (`id`),
   CONSTRAINT `role_menu_ibfk_2` FOREIGN KEY (`rid`) REFERENCES `casbin_rule` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of role_menu
 -- ----------------------------
-INSERT INTO `role_menu` VALUES ('1', '31', '2');
-INSERT INTO `role_menu` VALUES ('2', '31', '3');
-INSERT INTO `role_menu` VALUES ('3', '31', '4');
-INSERT INTO `role_menu` VALUES ('4', '31', '5');
+INSERT INTO `role_menu` VALUES ('29', '68', '2');
+INSERT INTO `role_menu` VALUES ('30', '68', '3');
+INSERT INTO `role_menu` VALUES ('31', '68', '4');
+INSERT INTO `role_menu` VALUES ('32', '68', '5');
 
 -- ----------------------------
 -- Table structure for user
@@ -140,7 +137,6 @@ CREATE TABLE `user` (
   `password` varchar(255) NOT NULL DEFAULT '',
   `enable` tinyint(1) DEFAULT '0' COMMENT '0：启用用户 1：禁用用户',
   `appid` varchar(255) NOT NULL DEFAULT '',
-  `secret` varchar(255) NOT NULL DEFAULT '',
   `name` varchar(255) NOT NULL DEFAULT '',
   `phone` varchar(255) NOT NULL DEFAULT '',
   `email` varchar(255) NOT NULL DEFAULT '',
@@ -149,10 +145,10 @@ CREATE TABLE `user` (
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('76', 'yhm1', 'x04jpoIrc8/mvNRqAG59Wg==', '0', '', '', '', '', '', '', '2019-01-14 11:54:11', null);
-INSERT INTO `user` VALUES ('80', 'root', 'x04jpoIrc8/mvNRqAG59Wg==', '0', '', '', '', '', '', '', '2019-01-14 16:48:39', null);
+INSERT INTO `user` VALUES ('76', 'yhm1', 'x04jpoIrc8/mvNRqAG59Wg==', '0', '', '', '', '', '', '2019-01-14 11:54:11', null);
+INSERT INTO `user` VALUES ('90', 'root', 'x04jpoIrc8/mvNRqAG59Wg==', '0', '', '', '', '', '', '2019-01-16 10:42:34', null);

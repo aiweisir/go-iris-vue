@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"strconv"
+	"time"
 )
 
 const (
@@ -20,4 +21,9 @@ func FmtRolePrefix(sub interface{}) string {
 		s = sub.(string)
 	}
 	return fmt.Sprintf("%s%s", rolePrefix, s)
+}
+
+// timestamp to time
+func StampToTime(st int64) time.Time {
+	return time.Unix(st / 1000, 0)
 }

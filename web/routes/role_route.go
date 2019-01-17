@@ -13,30 +13,30 @@ import (
 
 // 添加角色
 func CreateRole(ctx iris.Context) {
-	rule := new(casbins.CasbinRule)
+	rule := new(supports.RoleDefine)
 	if err := ctx.ReadJSON(rule); err != nil {
 		supports.Error(ctx, http.StatusInternalServerError, supports.Role_create_failur, nil)
 	}
 
 	e := casbins.GetEnforcer()
-	ok := e.AddPolicy(rule.Sub, rule.Obj, rule.Act, rule.Suf, "", "", "", rule.RoleName, "", "")
+	ok := e.AddPolicy(rule.Sub, rule.Obj, rule.Act, rule.Suf, rule.RoleName)
 	if !ok {
 		supports.Error(ctx, http.StatusInternalServerError, supports.Role_create_failur, nil)
 	}
-	supports.Ok_(ctx, supports.Option_success)
+	supports.Ok_(ctx, supports.OptionSuccess)
 }
 
 func AllRoleOfUser(ctx iris.Context) {
 	uid := ctx.Values().Get("uid").(string)
 	golog.Info("===>", uid)
 	roles := casbins.GetAllRoleByUID(uid)
-	supports.Ok(ctx, supports.Option_success, roles)
+	supports.Ok(ctx, supports.OptionSuccess, roles)
 }
 
 func DeleteRole(ctx iris.Context)  {
 	groupDef := new(supports.GroupDefine)
 	if err := ctx.ReadJSON(groupDef); err != nil {
-		supports.Error(ctx, http.StatusInternalServerError, supports.Option_failur, err.Error())
+		supports.Error(ctx, http.StatusInternalServerError, supports.OptionFailur, err.Error())
 		return
 	}
 
@@ -49,10 +49,10 @@ func DeleteRole(ctx iris.Context)  {
 	}
 
 	if !ok {
-		supports.Error(ctx, http.StatusInternalServerError, supports.Option_failur, nil)
+		supports.Error(ctx, http.StatusInternalServerError, supports.OptionFailur, nil)
 		return
 	}
-	supports.Ok(ctx, supports.Option_success, nil)
+	supports.Ok(ctx, supports.OptionSuccess, nil)
 }
 
 
@@ -60,7 +60,7 @@ func DeleteRole(ctx iris.Context)  {
 func RelationUserRole(ctx iris.Context) {
 	groupDef := new(supports.GroupDefine)
 	if err := ctx.ReadJSON(groupDef); err != nil {
-		supports.Error(ctx, http.StatusInternalServerError, supports.Option_failur, err.Error())
+		supports.Error(ctx, http.StatusInternalServerError, supports.OptionFailur, err.Error())
 		return
 	}
 
@@ -76,9 +76,9 @@ func RelationUserRole(ctx iris.Context) {
 	}
 
 	if !ok {
-		supports.Error(ctx, http.StatusInternalServerError, supports.Option_failur, nil)
+		supports.Error(ctx, http.StatusInternalServerError, supports.OptionFailur, nil)
 		return
 	}
-	supports.Ok_(ctx, supports.Option_success)
+	supports.Ok_(ctx, supports.OptionSuccess)
 }
 

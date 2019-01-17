@@ -8,6 +8,7 @@ import (
 	"go-iris/web/routes/dispatch"
 	"go-iris/web/supports"
 
+	"github.com/iris-contrib/middleware/cors"
 	"github.com/kataras/golog"
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/middleware/logger"
@@ -19,6 +20,7 @@ import (
 func main() {
 	app := newApp()
 	app.Logger().SetLevel(parse.O.LogLevel)
+
 	app.RegisterView(iris.HTML("resources", ".html"))
 	app.StaticWeb("/static", "resources/static") // 设置静态资源
 
@@ -30,47 +32,61 @@ func newApp() *iris.Application {
 	app := iris.New()
 	registerMiddlewareAndDefError(app)
 
-	app.PartyFunc("/", func(home iris.Party) {
-		// 首页模块
-		home.Party("/")
-		{
-			home.Get("/", func(ctx iris.Context) {
-				ctx.View("index.html")
-			})
-			home.Get("/sysMenu", dispatch.Handler(routes.DynamicMenu)) // 获取动态菜单
-		}
-
-		// 用户API模块
-		user := home.Party("/user")
-		{
-			//p.Use(middleware.BasicAuth)
-			user.Post("/registe", dispatch.Handler(routes.Registe))
-			user.Post("/login", dispatch.Handler(routes.Login))
-		}
-
-		// 权限API模块
-		admin := home.Party("/admin")
-		{
-			role := admin.Party("/role")
-			{
-				role.Post("/", dispatch.Handler(routes.CreateRole)) // 添加角色
-				role.Get("/", dispatch.Handler(routes.AllRoleOfUser)) // 获取所有角色
-				role.Delete("/", dispatch.Handler(routes.DeleteRole)) // 删除角色
-			}
-
-			permissions := admin.Party("/permissions")
-			{
-				permissions.Post("/permissions", dispatch.Handler(routes.RelationUserRole)) // 给角色添加权限
-			}
-		}
-
-		// demo测试API模块
-		demo := home.Party("/demo")
-		{
-			demo.Get("/{pid:long}", dispatch.Handler(routes.GetOneProduct))
-			demo.Put("/", dispatch.Handler(routes.AddOneProduct))
-		}
+	crs := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"}, //允许通过的主机名称
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"*"},
+		Debug:            true,
+		//AllowCredentials: true,
 	})
+
+	/* 定义路由 */
+	main := app.Party("/", crs).AllowMethods(iris.MethodOptions)
+	main.Use(middleware.ServeHTTP)
+	//main := app.Party("/")
+	home := main.Party("/")
+	{
+		home.Get("/", func(ctx iris.Context) { // 首页模块
+			ctx.View("index.html")
+		})
+		home.Get("/sysMenu", dispatch.Handler(routes.DynamicMenu)) // 获取动态菜单
+	}
+
+	// 用户API模块
+	user := main.Party("/user")
+	{
+		//p.Use(middleware.BasicAuth)
+		user.Post("/registe", dispatch.Handler(routes.Registe))
+		user.Post("/login", dispatch.Handler(routes.Login))
+	}
+
+	// 权限API模块
+	admin := main.Party("/admin")
+	{
+		users := admin.Party("/users")
+		{
+			users.Get("/", dispatch.Handler(routes.UserTable)) // 用户列表
+		}
+
+		role := admin.Party("/role")
+		{
+			role.Post("/", dispatch.Handler(routes.CreateRole))   // 添加角色
+			role.Get("/", dispatch.Handler(routes.AllRoleOfUser)) // 获取所有角色
+			role.Delete("/", dispatch.Handler(routes.DeleteRole)) // 删除角色
+		}
+
+		permissions := admin.Party("/permissions")
+		{
+			permissions.Post("/permissions", dispatch.Handler(routes.RelationUserRole)) // 给角色添加权限
+		}
+	}
+
+	// demo测试API模块
+	demo := main.Party("/demo")
+	{
+		demo.Get("/{pid:long}", dispatch.Handler(routes.GetOneProduct))
+		demo.Put("/", dispatch.Handler(routes.AddOneProduct))
+	}
 
 	return app
 }
@@ -98,11 +114,12 @@ func registerMiddlewareAndDefError(app *iris.Application) {
 	app.Use(
 		rcover.New(),
 		customLogger,
-		middleware.ServeHTTP)
+		//middleware.ServeHTTP
+	)
 
 	// ---------------------- 定义错误处理 ------------------------
 	app.OnErrorCode(iris.StatusNotFound, customLogger, func(ctx iris.Context) {
-		supports.Error(ctx, iris.StatusNotFound, supports.Not_found, nil)
+		supports.Error(ctx, iris.StatusNotFound, supports.NotFound, nil)
 	})
 	//app.OnErrorCode(iris.StatusForbidden, customLogger, func(ctx iris.Context) {
 	//	ctx.JSON(utils.Error(iris.StatusForbidden, "权限不足", nil))
