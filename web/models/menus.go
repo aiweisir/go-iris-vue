@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"go-iris/web/db"
 	"time"
-
-	"github.com/kataras/golog"
 )
 
 /** gov doc
@@ -89,8 +87,6 @@ AND m2.enabled=true order by m1.id, m2.id
 
 	menuTree := make([]MenuTreeGroup, 0)
 	e.SQL(sql).Find(&menuTree)
-
-	golog.Info("tree=>> ", menuTree)
 
 	menus := make([]Menu, 0) // 菜单树
 

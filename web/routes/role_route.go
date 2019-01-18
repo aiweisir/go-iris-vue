@@ -10,8 +10,14 @@ import (
 	"github.com/kataras/iris"
 )
 
+func RoleTable(ctx iris.Context) {
+	e := casbins.GetEnforcer()
+	golog.Info(e.GetAllRoles())
 
-// 添加角色
+	//supports.Ok(ctx, supports.OptionSuccess, roles)
+}
+
+// 创建角色
 func CreateRole(ctx iris.Context) {
 	rule := new(supports.RoleDefine)
 	if err := ctx.ReadJSON(rule); err != nil {
@@ -26,14 +32,7 @@ func CreateRole(ctx iris.Context) {
 	supports.Ok_(ctx, supports.OptionSuccess)
 }
 
-func AllRoleOfUser(ctx iris.Context) {
-	uid := ctx.Values().Get("uid").(string)
-	golog.Info("===>", uid)
-	roles := casbins.GetAllRoleByUID(uid)
-	supports.Ok(ctx, supports.OptionSuccess, roles)
-}
-
-func DeleteRole(ctx iris.Context)  {
+func DeleteRole(ctx iris.Context) {
 	groupDef := new(supports.GroupDefine)
 	if err := ctx.ReadJSON(groupDef); err != nil {
 		supports.Error(ctx, http.StatusInternalServerError, supports.OptionFailur, err.Error())
@@ -54,7 +53,6 @@ func DeleteRole(ctx iris.Context)  {
 	}
 	supports.Ok(ctx, supports.OptionSuccess, nil)
 }
-
 
 // 给用户指定角色
 func RelationUserRole(ctx iris.Context) {
@@ -81,4 +79,3 @@ func RelationUserRole(ctx iris.Context) {
 	}
 	supports.Ok_(ctx, supports.OptionSuccess)
 }
-

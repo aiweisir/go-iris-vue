@@ -1,11 +1,17 @@
 package a
 
 import (
+	"go-iris/middleware/casbins"
 	"testing"
 
 	"github.com/casbin/casbin"
 	"github.com/casbin/casbin/util"
 )
+
+func TestRbac(t *testing.T)  {
+	e := casbins.GetEnforcer()
+	t.Log(e.GetAllRoles())
+}
 
 func testGetRoles(t *testing.T, e *casbin.Enforcer, name string, res []string) {
 	t.Helper()

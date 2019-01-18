@@ -2,18 +2,31 @@ package a
 
 import (
 	"go-iris/web/models"
+	"log"
 	"testing"
 
 	"github.com/go-xorm/xorm"
 	"github.com/kataras/golog"
 )
 
-func TestJoint(t *testing.T)  {
+var (
+
+)
+
+func en() (*xorm.Engine) {
 	url := "root:root@tcp(127.0.0.1:3306)/casbin?charset=utf8"
 	engine, err := xorm.NewEngine("mysql", url)
 	if err != nil {
-		t.Fatal(err.Error())
+		log.Fatal(err.Error())
 	}
+	return engine
+}
+
+func TestRole(t *testing.T)  {
+}
+
+func TestJoint(t *testing.T)  {
+	engine := en()
 
 	join := make([]models.MenuTreeGroup, 0)
 

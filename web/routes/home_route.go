@@ -8,7 +8,7 @@ import (
 	"github.com/kataras/iris"
 )
 
-func DynamicMenu(ctx iris.Context)  {
+func DynamicMenu(ctx iris.Context) {
 	user, ok := jwts.ParseToken(ctx)
 	if !ok {
 		return
@@ -17,7 +17,3 @@ func DynamicMenu(ctx iris.Context)  {
 	menuTree := models.DynamicMenuTree(user.Id)
 	supports.Ok(ctx, supports.OptionSuccess, menuTree)
 }
-
-
-
-

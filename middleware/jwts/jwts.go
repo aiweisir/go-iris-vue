@@ -184,9 +184,9 @@ func (m *Jwts) CheckJWT(ctx context.Context) error {
 	parsedToken, err := jwt.Parse(token, m.Config.ValidationKeyGetter)
 	// Check if there was an error in parsing...
 	if err != nil {
-		m.logf("Error parsing token: %v", err)
-		m.Config.ErrorHandler(ctx, supports.TokenParseFailur)
-		return fmt.Errorf("Error parsing token: %v", err)
+		m.logf("Error parsing token1: %v", err)
+		m.Config.ErrorHandler(ctx, supports.TokenExpire)
+		return fmt.Errorf("Error parsing token2: %v", err)
 	}
 
 	if m.Config.SigningMethod != nil && m.Config.SigningMethod.Alg() != parsedToken.Header["alg"] {

@@ -31,6 +31,23 @@ func GetUserByUsername(user *User) (bool, error) {
 	return e.Get(user)
 }
 
+func UpdateUserById(user *User) (int64, error) {
+	e := db.MasterEngine()
+	return e.Id(user.Id).Update(user)
+}
+
+func DeleteByUsers(uids []int64) (effect int64, err error) {
+	e := db.MasterEngine()
+
+	u := new(User)
+	for _, v := range uids {
+		i, err1 := e.Id(v).Delete(u)
+		effect += i
+		err = err1
+	}
+	return
+}
+
 func GetPaginationUsers(page *supports.Pagination) ([]*User, int64, error) {
 	e := db.MasterEngine()
 	userList := make([]*User, 0)

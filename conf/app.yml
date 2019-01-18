@@ -7,7 +7,7 @@ Charset: UTF-8
 #自定义配置
 Other:
   IgnoreURLs: [/, /user/login, /user/registe, /login_pwd]
-  JWTTimeout: 600 #second
+  JWTTimeout: 900 #second
   LogLevel: debug
   Secret: xxx-Secret
 

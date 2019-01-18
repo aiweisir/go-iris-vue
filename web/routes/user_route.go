@@ -6,21 +6,27 @@ import (
 	"go-iris/web/models"
 	"go-iris/web/supports"
 	"go-iris/web/supports/vo"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/kataras/golog"
 	"github.com/kataras/iris"
 )
 
+func UserHub(app *iris.Application) {
+
+}
+
 func Registe(ctx iris.Context) {
 	user := new(models.User)
 	ctx.ReadJSON(&user)
 
-	user.CreateTime = time.Now()
 	user.Password = utils.AESEncrypt([]byte(user.Password))
+	user.Enable = 1
+	user.CreateTime = time.Now()
 
 	effect, err := models.CreateUser(user)
-	//err := u.DoRegiste(user)
 	if effect <= 0 || err != nil {
 		ctx.Application().Logger().Errorf("用户[%s]注册失败。%s", user.Username, err.Error())
 		supports.Error(ctx, iris.StatusInternalServerError, supports.RegisteFailur, nil)
@@ -33,15 +39,13 @@ func Login(ctx iris.Context) {
 	user := new(models.User)
 	if err := ctx.ReadJSON(&user); err != nil {
 		ctx.Application().Logger().Errorf("用户[%s]登录失败。%s", "", err.Error())
-		supports.Error(ctx, iris.StatusInternalServerError, supports.LoginFailur, nil)
+		supports.Error(ctx, iris.StatusBadRequest, supports.LoginFailur, nil)
 		return
 	}
 
 	mUser := new(models.User)
 	mUser.Username = user.Username
 	has, err := models.GetUserByUsername(mUser)
-	//has, err := u.DoLogin(mUser)
-	//golog.Error(mUser)
 	if err != nil {
 		ctx.Application().Logger().Errorf("用户[%s]登录失败。%s", user.Username, err.Error())
 		supports.Error(ctx, iris.StatusInternalServerError, supports.LoginFailur, nil)
@@ -71,6 +75,7 @@ func Login(ctx iris.Context) {
 	return
 }
 
+// 用户报表
 func UserTable(ctx iris.Context) {
 	pageNumber, err1 := ctx.URLParamInt("pageNumber")
 	pageSize, err2 := ctx.URLParamInt("pageSize")
@@ -79,15 +84,15 @@ func UserTable(ctx iris.Context) {
 	golog.Infof("pageNumber=%d, pageSize=%d, sortName=%s, sortOrder=%s", pageNumber, pageSize, sortName, sortOrder)
 	if err1 != nil || err2 != nil {
 		ctx.Application().Logger().Errorf("查询用户列表参数解析错误. %s, %s", err1.Error(), err2.Error())
-		supports.Error(ctx, iris.StatusInternalServerError, supports.ParseParamsFailur, nil)
+		supports.Error(ctx, iris.StatusBadRequest, supports.ParseParamsFailur, nil)
 		return
 	}
 
 	page := supports.Pagination{
-		PageNumber:pageNumber,
-		PageSize:pageSize,
-		SortName:sortName,
-		SortOrder:sortOrder,
+		PageNumber: pageNumber,
+		PageSize:   pageSize,
+		SortName:   sortName,
+		SortOrder:  sortOrder,
 	}
 	page.PageSetting()
 
@@ -99,11 +104,56 @@ func UserTable(ctx iris.Context) {
 	}
 
 	ctx.JSON(vo.BootstrapTableVO{
-		Total:total,
-		Rows:vo.TansformUserVOList(users...),
+		Total: total,
+		Rows:  vo.TansformUserVOList(users...),
 	})
 }
 
-// 修改角色的权限
+func UpdateUser(ctx iris.Context)  {
+	user := new(models.User)
+	if err := ctx.ReadJSON(&user); err != nil {
+		ctx.Application().Logger().Errorf("更新用户[%s]失败。%s", "", err.Error())
+		supports.Error(ctx, iris.StatusBadRequest, supports.OptionFailur, nil)
+		return
+	}
+	effect, err := models.UpdateUserById(user)
+	if err != nil {
+		ctx.Application().Logger().Errorf("更新用户[%s]失败。%s", "", err.Error())
+		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, nil)
+		return
+	}
+	supports.Ok(ctx, supports.OptionSuccess, effect)
+}
 
+// 删除用户
+func DeleteUsers(ctx iris.Context, uids string) {
+	uidList := strings.Split(uids, ",")
+	if len(uidList) == 0 {
+		ctx.Application().Logger().Error("删除用户错误, 参数不对.")
+		supports.Error(ctx, iris.StatusBadRequest, supports.ParseParamsFailur, nil)
+		return
+	}
+
+	dUids := make([]int64, 0)
+	for _, v := range uidList {
+		if v == "" {
+			continue
+		}
+		uid, err := strconv.ParseInt(v, 10, 64)
+		if err != nil {
+			ctx.Application().Logger().Error("删除用户错误, %s", err.Error())
+			supports.Error(ctx, iris.StatusInternalServerError, supports.ParseParamsFailur, nil)
+			return
+		}
+		dUids = append(dUids, uid)
+	}
+
+	effect, err := models.DeleteByUsers(dUids)
+	if err != nil {
+		ctx.Application().Logger().Error("删除用户错误, %s", err.Error())
+		supports.Error(ctx, iris.StatusInternalServerError, supports.DeleteUsersFailur, nil)
+		return
+	}
+	supports.Ok(ctx, supports.DeleteUsersSuccess, effect)
+}
 
