@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50714
 File Encoding         : 65001
 
-Date: 2019-01-17 17:17:01
+Date: 2019-01-18 17:34:30
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -28,24 +28,35 @@ CREATE TABLE `casbin_rule` (
   `v3` varchar(100) DEFAULT NULL,
   `v4` varchar(100) DEFAULT NULL,
   `v5` varchar(100) DEFAULT NULL,
+  `sub` varchar(64) DEFAULT NULL,
+  `obj` varchar(64) DEFAULT NULL,
+  `act` varchar(64) DEFAULT NULL,
+  `suf` varchar(64) DEFAULT NULL,
+  `modular` varchar(64) DEFAULT NULL,
+  `component` varchar(64) DEFAULT NULL,
+  `icon` varchar(64) DEFAULT NULL,
+  `role_name` varchar(64) DEFAULT NULL,
+  `resources_name` varchar(64) DEFAULT NULL,
+  `enabled` tinyint(1) DEFAULT '0',
+  `create_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `IDX_casbin_rule_v0` (`v0`),
-  KEY `IDX_casbin_rule_v1` (`v1`),
+  KEY `IDX_casbin_rule_p_type` (`p_type`),
   KEY `IDX_casbin_rule_v2` (`v2`),
   KEY `IDX_casbin_rule_v3` (`v3`),
   KEY `IDX_casbin_rule_v4` (`v4`),
   KEY `IDX_casbin_rule_v5` (`v5`),
-  KEY `IDX_casbin_rule_p_type` (`p_type`)
+  KEY `IDX_casbin_rule_v0` (`v0`),
+  KEY `IDX_casbin_rule_v1` (`v1`)
 ) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of casbin_rule
 -- ----------------------------
-INSERT INTO `casbin_rule` VALUES ('65', 'p', '90', '/*', 'ANY', '.*', '', '');
-INSERT INTO `casbin_rule` VALUES ('66', 'g', '90', 'admin', '', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('67', 'g', '90', 'demo', '', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('68', 'p', 'admin', '/admin*', 'GET|POST|DELETE|PUT', '.*', '角色管理', '');
-INSERT INTO `casbin_rule` VALUES ('69', 'p', 'demo', '/demo*', 'GET|POST|DELETE|PUT', '.*', 'demo角色', '');
+INSERT INTO `casbin_rule` VALUES ('65', 'p', '90', '/*', 'ANY', '.*', '', '', null, null, null, null, null, null, null, null, null, '0', null);
+INSERT INTO `casbin_rule` VALUES ('66', 'g', '90', 'admin', '', '', '', '', null, null, null, null, null, null, null, null, null, '0', null);
+INSERT INTO `casbin_rule` VALUES ('67', 'g', '90', 'demo', '', '', '', '', null, null, null, null, null, null, null, null, null, '0', null);
+INSERT INTO `casbin_rule` VALUES ('68', 'p', 'admin', '/admin*', 'GET|POST|DELETE|PUT', '.*', '角色管理', '', null, null, null, null, null, null, null, null, null, '0', null);
+INSERT INTO `casbin_rule` VALUES ('69', 'p', 'demo', '/demo*', 'GET|POST|DELETE|PUT', '.*', 'demo角色', '', null, null, null, null, null, null, null, null, null, '0', null);
 
 -- ----------------------------
 -- Table structure for demo
@@ -145,10 +156,15 @@ CREATE TABLE `user` (
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('76', 'yhm1', 'x04jpoIrc8/mvNRqAG59Wg==', '0', '', '', '', '', '', '2019-01-14 11:54:11', null);
-INSERT INTO `user` VALUES ('90', 'root', 'x04jpoIrc8/mvNRqAG59Wg==', '0', '', '', '', '', '', '2019-01-16 10:42:34', null);
+INSERT INTO `user` VALUES ('76', 'yhm1', 'x04jpoIrc8/mvNRqAG59Wg==', '1', '', '', '', '', '', '2019-01-14 11:54:11', null);
+INSERT INTO `user` VALUES ('90', 'root', 'x04jpoIrc8/mvNRqAG59Wg==', '1', '', '超级用户', '', '', '', '2019-01-16 10:42:34', null);
+INSERT INTO `user` VALUES ('92', 'yhm2', 'x04jpoIrc8/mvNRqAG59Wg==', '1', '', 'yy', '3213123', 'qq.com', '', '2019-01-18 10:08:12', null);
+INSERT INTO `user` VALUES ('104', '1-01', '1234', '0', '', 'mhjmhghf', 'nnvbn432423', '98089089', '', '2019-01-18 11:58:53', null);
+INSERT INTO `user` VALUES ('105', '22-201234', '123456', '1', '', 'fsdvcdxcvx', 'ffffffffffffffffffffff', '.,.mn,nm,hgntfrgffffffffffff', '', '2019-01-18 12:54:54', null);
+INSERT INTO `user` VALUES ('106', '3-12', '32qewqewqe', '0', '', '3ewqdd343444', '', 'sadsad1fs,..', '', '2019-01-18 12:56:31', null);
+INSERT INTO `user` VALUES ('108', '4', '6Xf9dl8Cv7OVFdc45vR7ig==', '1', '', '', '', '', '', '2019-01-18 13:34:56', null);
