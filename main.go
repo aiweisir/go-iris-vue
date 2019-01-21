@@ -28,12 +28,12 @@ func main() {
 }
 
 // 所有的路由
-func hub(app *iris.Application)  {
+func hub(app *iris.Application) {
 	crs := cors.New(cors.Options{
-		AllowedOrigins:   []string{"*"}, //允许通过的主机名称
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"*"},
-		Debug:            true,
+		AllowedOrigins: []string{"*"}, //允许通过的主机名称
+		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders: []string{"*"},
+		Debug:          true,
 		//AllowCredentials: true,
 	})
 
@@ -59,15 +59,16 @@ func hub(app *iris.Application)  {
 	{
 		// 用户管理
 		users := admin.Party("/users")
-		users.Get("/", dispatch.Handler(routes.UserTable)) // 用户列表
-		users.Put("/", dispatch.Handler(routes.UpdateUser)) // 更新用户
+		users.Get("/", dispatch.Handler(routes.UserTable))                   // 用户列表
+		users.Put("/", dispatch.Handler(routes.UpdateUser))                  // 更新用户
 		users.Delete("/{uids:string}", dispatch.Handler(routes.DeleteUsers)) // 删除用户
 
 		//角色管理
 		role := admin.Party("/role")
-		role.Get("/", dispatch.Handler(routes.RoleTable)) // 获取所有角色
-		role.Post("/", dispatch.Handler(routes.CreateRole))   // 创建角色
-		role.Delete("/", dispatch.Handler(routes.DeleteRole)) // 删除角色
+		role.Get("/", dispatch.Handler(routes.RoleTable))                  // 角色报表
+		role.Put("/", dispatch.Handler(routes.UpdateRole))                 // 更新角色
+		role.Post("/", dispatch.Handler(routes.CreateRole))                // 创建角色
+		role.Delete("/{rids:string}", dispatch.Handler(routes.DeleteRole)) // 删除角色
 
 		//权限管理
 		permissions := admin.Party("/permissions")
@@ -133,7 +134,3 @@ func preSettring(app *iris.Application) {
 	//	ctx.JSON(utils.Error(500, "服务器内部错误", nil))
 	//})
 }
-
-// -------------------------------------------------------------------------
-// -------------------------------------------------------------------------
-// -------------------------------------------------------------------------

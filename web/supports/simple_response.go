@@ -23,6 +23,9 @@ const (
 	DeleteUsersSuccess string = "删除用户成功"
 	DeleteUsersFailur  string = "删除用户错误"
 
+	DeleteRolesSuccess string = "删除角色成功"
+	DeleteRolesFailur  string = "删除角色错误"
+
 	UsernameFailur             string = "用户名错误"
 	PasswordFailur             string = "密码错误"
 	TokenCreateFailur          string = "生成token错误"
@@ -34,8 +37,8 @@ const (
 	NotFound                   string = "您请求的url不存在"
 	PermissionsLess            string = "权限不足"
 
-	Role_create_failur string = "创建角色失败"
-	Role_create_sucess string = "创建角色成功"
+	RoleCreateFailur   string = "创建角色失败"
+	RoleCreateSuccess string = "创建角色成功"
 
 	// value define
 

@@ -134,7 +134,7 @@ if (typeof jQuery === 'undefined') {
       Plugin.call($(this))
     })
   })
-}(jQuery));
+}(jQuery))
 
 /* BoxWidget()
  * ======
@@ -144,7 +144,7 @@ if (typeof jQuery === 'undefined') {
  *         This plugin auto activates on any element using the `.box` class
  *         Pass any option as data-option="value"
  */
-+(function ($) {
+function boxWidget ($) {
   'use strict'
 
   var DataKey = 'lte.boxwidget'
@@ -297,12 +297,15 @@ if (typeof jQuery === 'undefined') {
 
   // BoxWidget Data API
   // ==================
-  $(window).on('load', function () {
-    $(Selector.data).each(function () {
-      Plugin.call($(this))
-    })
+  // $(window).on('load', function () {
+  //   $(Selector.data).each(function () {
+  //     Plugin.call($(this))
+  //   })
+  // })
+  $(Selector.data).each(function () {
+    Plugin.call($(this))
   })
-}(jQuery));
+} boxWidget(jQuery);
 
 /* ControlSidebar()
  * ===============
@@ -1115,8 +1118,9 @@ function treeClick ($) {
 } treeClick(jQuery)
 
 function myFunc () {
+  boxWidget(jQuery)
   treeClick(jQuery)
 }
 export {
-  myFunc
+  myFunc,
 }

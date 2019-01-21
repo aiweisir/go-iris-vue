@@ -12,13 +12,13 @@ import (
 
 	"github.com/casbin/casbin"
 
-	"github.com/casbin/xorm-adapter"
+	//"github.com/casbin/xorm-adapter"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/kataras/iris/context"
 )
 
 var (
-	adt *xormadapter.Adapter // Your driver and data source.
+	adt *Adapter // Your driver and data source.
 	e   *casbin.Enforcer
 
 	adtLook sync.Mutex
@@ -90,7 +90,7 @@ func GetEnforcer() *casbin.Enforcer {
 	return e
 }
 
-func singleAdapter() *xormadapter.Adapter {
+func singleAdapter() *Adapter {
 	if adt != nil {
 		return adt
 	}
@@ -106,7 +106,7 @@ func singleAdapter() *xormadapter.Adapter {
 	// The adapter will use the MySQL database named "casbins".
 	// If it doesn't exist, the adapter will create it automatically.
 	// a := xormadapter.NewAdapter("mysql", "root:root@tcp(127.0.0.1:3306)/?charset=utf8&parseTime=True&loc=Local") // Your driver and data source.
-	adt = xormadapter.NewAdapter(master.Dialect, url, true) // Your driver and data source.
+	adt = NewAdapter(master.Dialect, url, true) // Your driver and data source.
 	return adt
 }
 

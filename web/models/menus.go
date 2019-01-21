@@ -91,7 +91,7 @@ AND m2.enabled=true order by m1.id, m2.id
 	menus := make([]Menu, 0) // 菜单树
 
 	if len(menuTree) > 0 {
-		parentMenu := menuTree[0].Menu // 父级菜单
+		parentMenu := menuTree[0].Menu    // 父级菜单
 		childMenus := make([]Children, 0) // 所有的子菜单
 		for _, v := range menuTree {
 			childMenus = append(childMenus, v.Children)
