@@ -11,15 +11,20 @@ import (
 // $ go get github.com/casbins/casbins
 // $ go run main.go
 func main() {
-	app := newApp()
+	app := iris.New()
+	preset.PreSettring(app)
+	route_Controller.Hub(app)
+
 	app.RegisterView(iris.HTML("resources", ".html"))
 	app.StaticWeb("/static", "resources/static") // 设置静态资源
 	golog.Info()
 	app.Run(iris.Addr(":8088"), iris.WithConfiguration(parse.C))
 }
+/*
 func newApp() *iris.Application {
 	app := iris.New()
 	preset.PreSettring(app)
 	route_Controller.Hub(app)
 	return app
 }
+*/
