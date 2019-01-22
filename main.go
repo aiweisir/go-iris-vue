@@ -65,14 +65,17 @@ func hub(app *iris.Application) {
 
 		//角色管理
 		role := admin.Party("/role")
-		role.Get("/", dispatch.Handler(routes.RoleTable))                  // 角色报表
-		role.Put("/", dispatch.Handler(routes.UpdateRole))                 // 更新角色
-		role.Post("/", dispatch.Handler(routes.CreateRole))                // 创建角色
-		role.Delete("/{rids:string}", dispatch.Handler(routes.DeleteRole)) // 删除角色
+		role.Get("/", dispatch.Handler(routes.RoleTable))                       // 角色报表
+		role.Put("/", dispatch.Handler(routes.UpdateRole))                      // 更新角色
+		role.Post("/", dispatch.Handler(routes.CreateRole))                     // 创建角色
+		role.Delete("/{rids:string}", dispatch.Handler(routes.DeleteRole))      // 删除角色
+		role.Get("/user/{rKey:string}", dispatch.Handler(routes.RoleUserTable)) // 角色关联的用户表
+		role.Get("/menu/{rid:long}", dispatch.Handler(routes.RoleMenuTable))    // 角色关联的菜单表
 
-		//权限管理
-		permissions := admin.Party("/permissions")
-		permissions.Post("/permissions", dispatch.Handler(routes.RelationUserRole)) // 给角色添加权限
+		//菜单管理
+		menu := admin.Party("/menu")
+		menu.Get("/", dispatch.Handler(routes.MenuTable))                    // 菜单列表
+		menu.Post("/permissions", dispatch.Handler(routes.RelationUserRole)) // 给角色添加权限
 	}
 
 	// demo测试API模块

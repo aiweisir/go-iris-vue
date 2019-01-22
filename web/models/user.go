@@ -31,6 +31,23 @@ func GetUserByUsername(user *User) (bool, error) {
 	return e.Get(user)
 }
 
+func GetUsersByUids(uids []int64, page *supports.Pagination) ([]*User, int64, error) {
+	e := db.MasterEngine()
+	users := make([]*User, 0)
+
+	s := e.In("id", uids).Limit(page.Limit, page.Start)
+	if page.SortName != "" {
+		switch page.SortOrder {
+		case "asc":
+			s.Asc(page.SortName)
+		case "desc":
+			s.Desc(page.SortName)
+		}
+	}
+	count, err := s.FindAndCount(&users)
+	return users, count, err
+}
+
 func UpdateUserById(user *User) (int64, error) {
 	e := db.MasterEngine()
 	return e.Id(user.Id).Update(user)

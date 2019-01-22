@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50714
 File Encoding         : 65001
 
-Date: 2019-01-18 17:34:30
+Date: 2019-01-22 17:21:35
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -28,16 +28,6 @@ CREATE TABLE `casbin_rule` (
   `v3` varchar(100) DEFAULT NULL,
   `v4` varchar(100) DEFAULT NULL,
   `v5` varchar(100) DEFAULT NULL,
-  `sub` varchar(64) DEFAULT NULL,
-  `obj` varchar(64) DEFAULT NULL,
-  `act` varchar(64) DEFAULT NULL,
-  `suf` varchar(64) DEFAULT NULL,
-  `modular` varchar(64) DEFAULT NULL,
-  `component` varchar(64) DEFAULT NULL,
-  `icon` varchar(64) DEFAULT NULL,
-  `role_name` varchar(64) DEFAULT NULL,
-  `resources_name` varchar(64) DEFAULT NULL,
-  `enabled` tinyint(1) DEFAULT '0',
   `create_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_casbin_rule_p_type` (`p_type`),
@@ -47,16 +37,17 @@ CREATE TABLE `casbin_rule` (
   KEY `IDX_casbin_rule_v5` (`v5`),
   KEY `IDX_casbin_rule_v0` (`v0`),
   KEY `IDX_casbin_rule_v1` (`v1`)
-) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of casbin_rule
 -- ----------------------------
-INSERT INTO `casbin_rule` VALUES ('65', 'p', '90', '/*', 'ANY', '.*', '', '', null, null, null, null, null, null, null, null, null, '0', null);
-INSERT INTO `casbin_rule` VALUES ('66', 'g', '90', 'admin', '', '', '', '', null, null, null, null, null, null, null, null, null, '0', null);
-INSERT INTO `casbin_rule` VALUES ('67', 'g', '90', 'demo', '', '', '', '', null, null, null, null, null, null, null, null, null, '0', null);
-INSERT INTO `casbin_rule` VALUES ('68', 'p', 'admin', '/admin*', 'GET|POST|DELETE|PUT', '.*', '角色管理', '', null, null, null, null, null, null, null, null, null, '0', null);
-INSERT INTO `casbin_rule` VALUES ('69', 'p', 'demo', '/demo*', 'GET|POST|DELETE|PUT', '.*', 'demo角色', '', null, null, null, null, null, null, null, null, null, '0', null);
+INSERT INTO `casbin_rule` VALUES ('65', 'p', '90', '/*', 'ANY', '.*', '超级用户', '', null);
+INSERT INTO `casbin_rule` VALUES ('66', 'g', '90', 'admin', '', '', '', '', null);
+INSERT INTO `casbin_rule` VALUES ('67', 'g', '90', 'demo', '', '', '', '', null);
+INSERT INTO `casbin_rule` VALUES ('68', 'p', 'admin', '/admin*', 'GET|POST|DELETE|PUT', '.*', '角色管理', '', null);
+INSERT INTO `casbin_rule` VALUES ('69', 'p', 'demo', '/demo*', 'GET|POST|DELETE|PUT', '.*', 'demo角色12', '', null);
+INSERT INTO `casbin_rule` VALUES ('71', 'p', 't1', '/*', 'PUT|DELETE|GET|POST', '.*', '测试1', '', null);
 
 -- ----------------------------
 -- Table structure for demo
@@ -156,7 +147,7 @@ CREATE TABLE `user` (
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=110 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user

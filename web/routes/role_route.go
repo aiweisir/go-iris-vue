@@ -5,38 +5,23 @@ import (
 	"go-iris/web/models"
 	"go-iris/web/supports"
 	"go-iris/web/supports/vo"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
 
-	"github.com/kataras/golog"
 	"github.com/kataras/iris"
 )
 
 func RoleTable(ctx iris.Context) {
-	//e := casbins.GetEnforcer()
-	//golog.Info(e.GetAllRoles())
-
-	pageNumber, err1 := ctx.URLParamInt("pageNumber")
-	pageSize, err2 := ctx.URLParamInt("pageSize")
-	sortName := ctx.URLParam("sortName")
-	sortOrder := ctx.URLParam("sortOrder")
-	golog.Infof("pageNumber=%d, pageSize=%d, sortName=%s, sortOrder=%s", pageNumber, pageSize, sortName, sortOrder)
-	if err1 != nil || err2 != nil {
-		ctx.Application().Logger().Errorf("查询角色列表参数解析错误. %s, %s", err1.Error(), err2.Error())
+	page, err := supports.NewPagination(ctx)
+	if err != nil {
+		ctx.Application().Logger().Errorf("查询角色列表参数解析错误. %s", err.Error())
 		supports.Error(ctx, iris.StatusBadRequest, supports.ParseParamsFailur, nil)
 		return
 	}
 
-	page := supports.Pagination{
-		PageNumber: pageNumber,
-		PageSize:   pageSize,
-		SortName:   sortName,
-		SortOrder:  sortOrder,
-	}
-	page.PageSetting()
-
-	rules, total, err := models.GetPaginationRoles(&page)
+	rules, total, err := models.GetPaginationRoles(page)
 	if err != nil {
 		ctx.Application().Logger().Errorf("查询角色列表错误. %s", err.Error())
 		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, nil)
@@ -65,7 +50,7 @@ func CreateRole(ctx iris.Context) {
 	supports.Ok_(ctx, supports.RoleCreateSuccess)
 }
 
-func UpdateRole(ctx iris.Context)  {
+func UpdateRole(ctx iris.Context) {
 	role := new(models.CasbinRule)
 	if err := ctx.ReadJSON(&role); err != nil {
 		ctx.Application().Logger().Errorf("更新角色[%s]失败。%s", "", err.Error())
@@ -157,4 +142,61 @@ func RelationUserRole(ctx iris.Context) {
 		return
 	}
 	supports.Ok_(ctx, supports.OptionSuccess)
+}
+
+func RoleUserTable(ctx iris.Context, rKey string) {
+	page, err := supports.NewPagination(ctx)
+	if err != nil {
+		ctx.Application().Logger().Errorf("获取角色关联的用户表错误. %s", err.Error())
+		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, nil)
+		return
+	}
+
+	e := casbins.GetEnforcer()
+	users := e.GetUsersForRole(rKey)
+	uids := make([]int64, 0)
+	for _, v := range users {
+		id, err := strconv.ParseInt(v, 10, 64)
+		if err != nil {
+			ctx.Application().Logger().Error("获取角色关联的用户表错误, %s", err.Error())
+			supports.Error(ctx, iris.StatusInternalServerError, supports.ParseParamsFailur, nil)
+			return
+		}
+		uids = append(uids, id)
+	}
+
+	userList, total, err := models.GetUsersByUids(uids, page)
+	if err != nil {
+		ctx.Application().Logger().Error("获取角色关联的用户表错误, %s", err.Error())
+		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, nil)
+		return
+	}
+
+	ctx.JSON(vo.BootstrapTableVO{
+		Total: total,
+		Rows:  vo.TansformUserVOList(userList...),
+	})
+}
+
+func RoleMenuTable(ctx iris.Context, rid int64) {
+	page, err := supports.NewPagination(ctx)
+	if err != nil {
+		ctx.Application().Logger().Errorf("获取角色关联的菜单表错误. %s", err.Error())
+		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, nil)
+		return
+	}
+
+	menus, total, err := models.GetMenusByRoleid(rid, page)
+	if err != nil {
+		ctx.Application().Logger().Errorf("获取角色关联的菜单表错误, %s, %v", err.Error(), menus)
+		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, err.Error())
+		return
+	}
+
+	log.Printf("--->>menus= %v", menus)
+
+	ctx.JSON(vo.BootstrapTableVO{
+		Total: total,
+		Rows:  menus,
+	})
 }

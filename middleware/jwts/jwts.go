@@ -78,7 +78,7 @@ func ParseToken(ctx context.Context) (*models.User, bool) {
 	id, ok1 := mapClaims["id"].(float64)
 	username, ok2 := mapClaims["username"].(string)
 
-	golog.Infof("*** MapClaims=%v, [id=%f, ok1=%t]; [username=%s, ok2=%t]", mapClaims, id, ok1, username, ok2)
+	//golog.Infof("*** MapClaims=%v, [id=%f, ok1=%t]; [username=%s, ok2=%t]", mapClaims, id, ok1, username, ok2)
 	if !ok1 || !ok2 {
 		supports.Error(ctx, iris.StatusInternalServerError, supports.TokenParseFailur, nil)
 		return nil, false

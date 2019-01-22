@@ -77,26 +77,14 @@ func Login(ctx iris.Context) {
 
 // 用户报表
 func UserTable(ctx iris.Context) {
-	pageNumber, err1 := ctx.URLParamInt("pageNumber")
-	pageSize, err2 := ctx.URLParamInt("pageSize")
-	sortName := ctx.URLParam("sortName")
-	sortOrder := ctx.URLParam("sortOrder")
-	golog.Infof("pageNumber=%d, pageSize=%d, sortName=%s, sortOrder=%s", pageNumber, pageSize, sortName, sortOrder)
-	if err1 != nil || err2 != nil {
-		ctx.Application().Logger().Errorf("查询用户列表参数解析错误. %s, %s", err1.Error(), err2.Error())
+	page, err := supports.NewPagination(ctx)
+	if err != nil {
+		ctx.Application().Logger().Errorf("查询用户列表参数解析错误. %s", err.Error())
 		supports.Error(ctx, iris.StatusBadRequest, supports.ParseParamsFailur, nil)
 		return
 	}
 
-	page := supports.Pagination{
-		PageNumber: pageNumber,
-		PageSize:   pageSize,
-		SortName:   sortName,
-		SortOrder:  sortOrder,
-	}
-	page.PageSetting()
-
-	users, total, err := models.GetPaginationUsers(&page)
+	users, total, err := models.GetPaginationUsers(page)
 	if err != nil {
 		ctx.Application().Logger().Errorf("查询用户列表错误. %s", err.Error())
 		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, nil)
