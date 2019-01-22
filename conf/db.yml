@@ -2,7 +2,7 @@
 master:
   dialect: mysql
   user: root
-  password: root
+  password:
   host: 127.0.0.1
   port: 3306
   database: casbin
@@ -14,7 +14,7 @@ master:
 slave:
   dialect: mysql
   user: root
-  password: root
+  password:
   host: 127.0.0.1
   port: 3306
   database: casbin
