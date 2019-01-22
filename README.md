@@ -3,10 +3,9 @@
 
 ## 目前的界面效果
 ![登录](https://images.gitee.com/uploads/images/2019/0108/173619_918bd02f_1537471.png "屏幕截图.png")
-
-![首页1](https://images.gitee.com/uploads/images/2019/0108/173654_4cfd4836_1537471.png "屏幕截图.png")
-
-![首页2](https://images.gitee.com/uploads/images/2019/0108/173718_83b02d34_1537471.png "屏幕截图.png")
+![用户管理](https://images.gitee.com/uploads/images/2019/0122/172900_4bb52b8f_1537471.png "屏幕截图.png")
+![角色管理](https://images.gitee.com/uploads/images/2019/0122/172936_6bacbb35_1537471.png "屏幕截图.png")
+![菜单管理](https://images.gitee.com/uploads/images/2019/0122/172953_bc31acf3_1537471.png "屏幕截图.png")
 
 ### 背景介绍
 `Golang + Iris(web框架) + Casbin(权限) + JWT + Vue(渐进式js)`的web server框架，可前后端分离。<br />
@@ -50,11 +49,8 @@ go-iris
 1. 每次修改`/conf/app.yml`或`/conf/db.yml`的配置后，都需要在项目下执行命令打包配置数据：`go-bindata -pkg parse -o inits/parse/conf-data.go conf/`会生成`/inits/parse/conf-data.go`数据文件（执行成功后不会有任何提示，则反之）；
 2. **部署时如有上述配置文件修改也需要再执行一遍上述命令，如此才能使配置修改生效**；
 3. `go-bindata`的安装和使用教程在项目下的`/doc/go-bindata-usage`文件中说明；
-4. 除了首页、登录、注册接口(在/conf/app.yml中的Other.IgnoreURLs中添加配置)其他都需要在Header中设置token信息。<key:value> 设置：
-    * key   -> Authorization
-    * value -> bearer xxx
-5. 如果不使用前端，可以使用server端根目录下已经打包好的`/resources/*`前端文件；
-6. 如果要使用前端：
+4. 如果不使用前端，可以使用server端根目录下已经打包好的`/resources/*`前端文件；
+5. 如果要使用前端：
     * clone或下载`front-vue`分支代码
     * 推荐安装`vue >= 2.x`和`node.js >= v8.9.3(LTS)`环境。IDE推荐安装webstone
     * `npm install`安装本地前端环境
