@@ -1,4 +1,4 @@
-<a href='https://gitee.com/yhm_my/go-iris'><img src='https://gitee.com/yhm_my/go-iris/widgets/widget_1.svg' alt='go iris web'></img></a>
+<a href='https://gitee.com/wx85278161/go-iris'><img src='https://gitee.com/wx85278161/go-iris/widgets/widget_1.svg' alt='go iris web'></img></a>
 # go iris web实战（响应式web）
 
 ## 目前的界面效果

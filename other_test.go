@@ -1,12 +1,10 @@
 package main
 
 import (
-	"fmt"
+
 	"go-iris/web/models"
 	"reflect"
-	"strings"
 	"testing"
-	"time"
 
 	"github.com/iris-contrib/httpexpect"
 	"github.com/kataras/iris/httptest"
