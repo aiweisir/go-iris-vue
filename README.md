@@ -1,5 +1,5 @@
 <a href='https://gitee.com/yhm_my/go-iris'><img src='https://gitee.com/yhm_my/go-iris/widgets/widget_1.svg' alt='go iris web'></img></a>
-# go iris web实战（响应式web）
+# go iris RESTful实战（响应式web）
 
 ## 目前的界面效果
 ![登录](https://images.gitee.com/uploads/images/2019/0108/173619_918bd02f_1537471.png "屏幕截图.png")
