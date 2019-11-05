@@ -6,7 +6,7 @@ import (
 
 /**
 用于解析权限
- */
+*/
 
 // 通过uid获取用户的所有资源
 func GetAllResourcesByUID(uid string) map[string]interface{} {
@@ -19,7 +19,7 @@ func GetAllResourcesByUID(uid string) map[string]interface{} {
 
 	// 获取用户的隐形角色
 	implicitRoles := e.GetImplicitRolesForUser(uid)
-	for _, v := range implicitRoles{
+	for _, v := range implicitRoles {
 		// 查询用户隐形角色的资源权限
 		subRes := e.GetPermissionsForUser(v)
 		golog.Infof("-------------------------------------------------")

@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func Test_a(t *testing.T)  {
+func Test_a(t *testing.T) {
 	//设置摘要
 	//明文
 	origData := []byte("123456")

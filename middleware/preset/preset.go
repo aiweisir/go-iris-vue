@@ -1,11 +1,11 @@
 package preset
 
 import (
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
+	"github.com/kataras/iris/v12/middleware/logger"
+	rcover "github.com/kataras/iris/v12/middleware/recover"
 	"go-iris/inits/parse"
 	"go-iris/web/supports"
-	"github.com/kataras/iris/middleware/logger"
-	rcover "github.com/kataras/iris/middleware/recover"
 )
 
 // 注册中间件、定义错误处理

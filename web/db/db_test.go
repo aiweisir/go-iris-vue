@@ -18,7 +18,6 @@ func Test_r(t *testing.T) {
 	//	UpdateTime: time.Now(),
 	//}
 
-
 	master.Ping()
 
 	//插入记录

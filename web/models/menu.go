@@ -10,7 +10,7 @@ import (
 
 /** gov doc
 http://www.xorm.io/docs/
- */
+*/
 
 type (
 	// 菜单表

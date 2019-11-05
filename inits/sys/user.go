@@ -37,7 +37,6 @@ func CheckRootExit() bool {
 	return exit
 }
 
-
 func CreateRoot() {
 	newRoot := models.User{
 		Username:   username,
@@ -69,5 +68,3 @@ func addAllpolicy(rooId string) {
 		e.AddGroupingPolicy(rooId, v[0])
 	}
 }
-
-

@@ -2,8 +2,7 @@ package cors
 
 import (
 	"github.com/iris-contrib/middleware/cors"
-	"github.com/kataras/iris/context"
-
+	"github.com/kataras/iris/v12/context"
 )
 
 func Mycors() context.Handler {

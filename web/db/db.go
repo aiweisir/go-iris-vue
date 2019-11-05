@@ -6,12 +6,13 @@ import (
 	"go-iris/utils"
 	"sync"
 
-	"github.com/go-xorm/core"
 	"github.com/kataras/golog"
+	"xorm.io/core"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/go-xorm/xorm"
+	"xorm.io/xorm"
 )
+
 var (
 	masterEngine *xorm.Engine
 	slaveEngine  *xorm.Engine

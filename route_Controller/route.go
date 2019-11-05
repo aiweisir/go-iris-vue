@@ -1,7 +1,7 @@
 package route_Controller
 
 import (
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
 	"go-iris/middleware/cors"
 
 	"go-iris/middleware"

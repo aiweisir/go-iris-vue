@@ -3,7 +3,7 @@ package supports
 import (
 	"errors"
 
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
 )
 
 // bootstraptable 分页参数

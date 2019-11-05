@@ -11,8 +11,6 @@ type RoleMenu struct {
 	Mid int64 `xorm:"pk autoincr INT(10) notnull" json:"mid"`
 }
 
-
-
 //
 func CreateRelationRoleMenu(roleMenu ...*RoleMenu) (int64, error) {
 	e := db.MasterEngine()

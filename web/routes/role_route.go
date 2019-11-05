@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
 )
 
 func RoleTable(ctx iris.Context) {
@@ -102,7 +102,7 @@ func DeleteRole(ctx iris.Context, rids string) {
 		}
 		uid, err := strconv.ParseInt(v, 10, 64)
 		if err != nil {
-			ctx.Application().Logger().Error("删除角色错误, %s", err.Error())
+			ctx.Application().Logger().Errorf("删除角色错误, %v", err)
 			supports.Error(ctx, iris.StatusInternalServerError, supports.ParseParamsFailur, nil)
 			return
 		}
@@ -111,7 +111,7 @@ func DeleteRole(ctx iris.Context, rids string) {
 
 	effect, err := models.DeleteByRoles(dRids)
 	if err != nil {
-		ctx.Application().Logger().Error("删除角色错误, %s", err.Error())
+		ctx.Application().Logger().Errorf("删除角色错误, %v", err)
 		supports.Error(ctx, iris.StatusInternalServerError, supports.DeleteRolesFailur, nil)
 		return
 	}
@@ -153,12 +153,17 @@ func RoleUserTable(ctx iris.Context, rKey string) {
 	}
 
 	e := casbins.GetEnforcer()
-	users := e.GetUsersForRole(rKey)
+	users, err := e.GetUsersForRole(rKey)
+	if err != nil {
+		ctx.Application().Logger().Errorf("casbin: %v", err)
+		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, nil)
+		return
+	}
 	uids := make([]int64, 0)
 	for _, v := range users {
 		id, err := strconv.ParseInt(v, 10, 64)
 		if err != nil {
-			ctx.Application().Logger().Error("获取角色关联的用户表错误, %s", err.Error())
+			ctx.Application().Logger().Errorf("获取角色关联的用户表错误, %s", err.Error())
 			supports.Error(ctx, iris.StatusInternalServerError, supports.ParseParamsFailur, nil)
 			return
 		}
@@ -167,7 +172,7 @@ func RoleUserTable(ctx iris.Context, rKey string) {
 
 	userList, total, err := models.GetUsersByUids(uids, page)
 	if err != nil {
-		ctx.Application().Logger().Error("获取角色关联的用户表错误, %s", err.Error())
+		ctx.Application().Logger().Errorf("获取角色关联的用户表错误, %s", err.Error())
 		supports.Error(ctx, iris.StatusInternalServerError, supports.OptionFailur, nil)
 		return
 	}

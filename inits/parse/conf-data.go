@@ -248,11 +248,11 @@ type bintree struct {
 }
 
 var _bintree = &bintree{nil, map[string]*bintree{
-	"conf": &bintree{nil, map[string]*bintree{
-		"app.yml":          &bintree{confAppYml, map[string]*bintree{}},
-		"casbinpolicy.csv": &bintree{confCasbinpolicyCsv, map[string]*bintree{}},
-		"db.yml":           &bintree{confDbYml, map[string]*bintree{}},
-		"rbac_model.conf":  &bintree{confRbac_modelConf, map[string]*bintree{}},
+	"conf": {nil, map[string]*bintree{
+		"app.yml":          {confAppYml, map[string]*bintree{}},
+		"casbinpolicy.csv": {confCasbinpolicyCsv, map[string]*bintree{}},
+		"db.yml":           {confDbYml, map[string]*bintree{}},
+		"rbac_model.conf":  {confRbac_modelConf, map[string]*bintree{}},
 	}},
 }}
 

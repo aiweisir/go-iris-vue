@@ -1,14 +1,13 @@
 package dispatch
 
 import (
-	"go-iris/web/routesutes/dispatch"
 	"errors"
+	"go-iris/web/routesutes/dispatch"
 	"testing"
 
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/context"
-	"github.com/kataras/iris/httptest"
-
+	"github.com/kataras/iris/v12"
+	"github.com/kataras/iris/v12/context"
+	"github.com/kataras/iris/v12/httptest"
 )
 
 func GetText() string {
