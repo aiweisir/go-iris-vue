@@ -2,7 +2,7 @@ package parse
 
 import (
 	"github.com/kataras/golog"
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
 	"gopkg.in/yaml.v2"
 )
 

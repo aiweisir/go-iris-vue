@@ -25,5 +25,5 @@ func FmtRolePrefix(sub interface{}) string {
 
 // timestamp to time
 func StampToTime(st int64) time.Time {
-	return time.Unix(st / 1000, 0)
+	return time.Unix(st/1000, 0)
 }

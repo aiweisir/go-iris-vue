@@ -3,7 +3,7 @@ package dispatch
 import (
 	"testing"
 
-	"github.com/kataras/iris/context"
+	"github.com/kataras/iris/v12/context"
 )
 
 func TestPathParams(t *testing.T) {

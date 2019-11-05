@@ -14,7 +14,7 @@ import (
 
 	//"github.com/casbin/xorm-adapter"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/kataras/iris/context"
+	"github.com/kataras/iris/v12/context"
 )
 
 var (
@@ -22,7 +22,7 @@ var (
 	e   *casbin.Enforcer
 
 	adtLook sync.Mutex
-	eLook sync.Mutex
+	eLook   sync.Mutex
 
 	rbacModel string
 )

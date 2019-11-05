@@ -1,24 +1,20 @@
 package main
 
 import (
-
 	"go-iris/web/models"
 	"reflect"
 	"testing"
 
-	"github.com/iris-contrib/httpexpect"
-	"github.com/kataras/iris/httptest"
+	"github.com/kataras/iris/v12/httptest"
 )
 
-func Test1(t *testing.T)  {
+func Test1(t *testing.T) {
 	user := models.User{}
 	t.Log(user.Username == "")
 	t.Log(reflect.TypeOf(user.Username))
 	t.Log(reflect.TypeOf(user).String())
 	t.Log(reflect.TypeOf(user))
 }
-
-
 
 func TestCasbinMiddleware(t *testing.T) {
 	app := newApp()
@@ -57,6 +53,6 @@ func TestCasbinMiddleware(t *testing.T) {
 	}
 }
 
-func check(e *httpexpect.Expect, method, path, username string, status int) {
+func check(e *httptest.Expect, method, path, username string, status int) {
 	e.Request(method, path).WithBasicAuth(username, "password").Expect().Status(status)
 }

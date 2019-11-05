@@ -1,7 +1,7 @@
 package supports
 
 import (
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
 )
 
 const (
@@ -37,7 +37,7 @@ const (
 	NotFound                   string = "您请求的url不存在"
 	PermissionsLess            string = "权限不足"
 
-	RoleCreateFailur   string = "创建角色失败"
+	RoleCreateFailur  string = "创建角色失败"
 	RoleCreateSuccess string = "创建角色成功"
 
 	// value define

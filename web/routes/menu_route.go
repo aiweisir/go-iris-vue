@@ -5,7 +5,7 @@ import (
 	"go-iris/web/supports"
 	"go-iris/web/supports/vo"
 
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
 )
 
 func MenuTable(ctx iris.Context) {

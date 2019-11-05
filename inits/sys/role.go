@@ -22,7 +22,7 @@ func CreateSystemRole() bool {
 		p := e.GetFilteredPolicy(0, v[0])
 		if len(p) == 0 {
 			if ok := e.AddPolicy(v); !ok {
-				golog.Fatalf("初始化角色[%s]权限失败。%s", v)
+				golog.Fatalf("初始化角色[%s]权限失败。", v)
 			}
 		}
 	}

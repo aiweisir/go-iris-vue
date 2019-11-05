@@ -4,7 +4,7 @@ import (
 	"go-iris/web/routes/dispatch/di"
 
 	"github.com/kataras/golog"
-	"github.com/kataras/iris/context"
+	"github.com/kataras/iris/v12/context"
 )
 
 // def is the default herp value which can be used for dependencies share.

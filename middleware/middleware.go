@@ -6,7 +6,7 @@ import (
 	"go-iris/middleware/jwts"
 	"strings"
 
-	"github.com/kataras/iris/context"
+	"github.com/kataras/iris/v12/context"
 )
 
 type Middleware struct {
@@ -42,7 +42,7 @@ func ServeHTTP(ctx context.Context) {
 return
 	true:则跳过不需验证，如登录接口等...
 	false:需要进一步验证
- */
+*/
 func checkURL(reqPath string) bool {
 	//config := iris.YAML("conf/app.yml")
 	//ignoreURLs := config.GetOther()["ignoreURLs"].([]interface{})

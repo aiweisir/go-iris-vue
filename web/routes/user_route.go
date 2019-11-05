@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/kataras/golog"
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
 )
 
 func UserHub(app *iris.Application) {
@@ -63,7 +63,7 @@ func Login(ctx iris.Context) {
 		return
 	}
 
-	token, err := jwts.GenerateToken(mUser);
+	token, err := jwts.GenerateToken(mUser)
 	golog.Infof("用户[%s], 登录生成token [%s]", mUser.Username, token)
 	if err != nil {
 		ctx.Application().Logger().Errorf("用户[%s]登录，生成token出错。%s", user.Username, err.Error())
@@ -97,7 +97,7 @@ func UserTable(ctx iris.Context) {
 	})
 }
 
-func UpdateUser(ctx iris.Context)  {
+func UpdateUser(ctx iris.Context) {
 	user := new(models.User)
 	if err := ctx.ReadJSON(&user); err != nil {
 		ctx.Application().Logger().Errorf("更新用户[%s]失败。%s", "", err.Error())
@@ -129,7 +129,7 @@ func DeleteUsers(ctx iris.Context, uids string) {
 		}
 		uid, err := strconv.ParseInt(v, 10, 64)
 		if err != nil {
-			ctx.Application().Logger().Error("删除用户错误, %s", err.Error())
+			ctx.Application().Logger().Errorf("删除用户错误, %v", err)
 			supports.Error(ctx, iris.StatusInternalServerError, supports.ParseParamsFailur, nil)
 			return
 		}
@@ -138,10 +138,9 @@ func DeleteUsers(ctx iris.Context, uids string) {
 
 	effect, err := models.DeleteByUsers(dUids)
 	if err != nil {
-		ctx.Application().Logger().Error("删除用户错误, %s", err.Error())
+		ctx.Application().Logger().Errorf("删除用户错误, %s", err.Error())
 		supports.Error(ctx, iris.StatusInternalServerError, supports.DeleteUsersFailur, nil)
 		return
 	}
 	supports.Ok(ctx, supports.DeleteUsersSuccess, effect)
 }
-
